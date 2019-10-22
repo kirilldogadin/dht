@@ -1,0 +1,128 @@
+package global.unet.node;
+
+import global.unet.id.KademliaId;
+import global.unet.id.NetworkId;
+import global.unet.id.UnionId;
+import global.unet.routing.table.NodeInfo;
+import global.unet.routing.table.RoutingTable;
+import global.unet.routing.table.XorTreeRoutingTable;
+import global.unet.server.WebsocketServer;
+import global.unet.storage.Content;
+import global.unet.uname.UnameResolver;
+
+import java.util.List;
+import java.util.Optional;
+
+public class KademliaRegularNode implements RegularNode {
+
+    private final UnionId selfUnionId;
+    private final RoutingNode routingNode;
+    private final StorageNode storageNode;
+    private final int tresholdResposibility;
+    private final UnameResolver resolver;
+
+    //Todo тестовый конструктор не знаю зачем
+    public KademliaRegularNode() {
+        resolver = networkId -> null;
+        selfUnionId = new KademliaId(new byte[10]);
+        RoutingTable routingTable = new XorTreeRoutingTable(selfUnionId, resolver);
+        routingNode = new KademliaRoutingNode(new WebsocketServer(),routingTable);
+        storageNode = (StorageNode) new Object();
+        tresholdResposibility = 5;
+
+    }
+
+    public KademliaRegularNode(RoutingNode routingNode, StorageNode storageNode, int tresholdResposibility, UnameResolver resolver, UnionId selfUnid){
+        this.storageNode = storageNode;
+        this.routingNode = routingNode;
+        this.tresholdResposibility = tresholdResposibility;
+        this.resolver = resolver;
+        this.selfUnionId = selfUnid;
+    }
+
+
+    /**
+     *
+     * Метод может вернуть
+     * 1. Список владельцев контента
+     * Или
+     * 2. Список ближайших нод
+     * Нужен какой-то флаг? ИЛИ NodeInfo это ключ, в Мапе, значение в которой контент , который есть у ноды?
+     *
+     * @param networkId
+     * @return
+     */
+    @Override
+    public List<NodeInfo> lookupContentStorages(NetworkId networkId) {
+       //Todo невверно, т.к. в случае если нода Выложила контент, то
+        //или проверять в списке выложенного контента ,а в потом ответсвенность
+        //или вообще не проверять ответсвенность
+        if (!checkResponsibility(networkId)){
+            findClosestNode(networkId);
+        }
+        //можно ускорить проверку фильтром блума ложные Да, но всегда верные НЕТ
+        //Если точно нет
+        List<Content> content = storageNode.getContent(networkId);
+        if (content.isEmpty()){
+            findClosestNode(networkId);
+        }
+        return null;
+
+    }
+
+    @Override
+    public List<NodeInfo> findClosestNode(NetworkId networkId) {
+        return null;
+    }
+
+    @Override
+    public void addNode(NodeInfo nodeInfo) {
+
+    }
+
+    @Override
+    public void start() {
+
+    }
+
+    @Override
+    public void shutDown() {
+
+    }
+
+    @Override
+    public List<Content> getContent(NetworkId networkId) {
+        return null;
+    }
+
+    @Override
+    public NetworkId putContent(Content content) {
+        return null;
+    }
+
+    @Override
+    public List<Content> getContent(UnionId networkId) {
+        return null;
+    }
+
+    @Override
+    public int thresholdResponsibility() {
+        return tresholdResposibility;
+    }
+
+    @Override
+    public boolean checkResponsibility(NetworkId networkId) {
+        storageNode.checkResponsibility(networkId);
+
+        //todo юзать верхний метод, а это в него перенести
+        return Optional.ofNullable(networkId)
+                .map(resolver::resolve)
+                .map(unionId -> unionId.computeDistance(unionId))
+                .filter(this::lessThenThreshold)
+                .isPresent();
+    }
+
+    private boolean lessThenThreshold(byte[] bytes){
+        return true;
+    }
+}
