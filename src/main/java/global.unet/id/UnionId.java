@@ -17,12 +17,28 @@ public interface UnionId extends NetworkId {
 
     UnionId computeDistanceAsUnionId(UnionId in);
 
-    byte[] computeDistance(UnionId in);
+    /**
+     * вычислить дистанцию между аргументом и текущим объектом
+     *
+     * @param from unid для сравнения
+     * @return distance between current and from
+     */
+    byte[] computeDistance(byte[] from);
+
+    /**
+     * вычислить дистанцию между двумя UnionId
+     * @param from
+     * @param to
+     * @return
+     */
+    byte[] computeDistance(byte[] from, byte[] to);
+
+    byte[] asBytes();
 
     //надо ли?
     //TODO мб вынести в отдельный класс и отдельно связать их?
-    interface Metric {
-
+    interface Metric<F,T,D> {
+         D compute(F from,T to);
     }
 
 }

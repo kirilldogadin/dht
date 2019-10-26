@@ -117,7 +117,8 @@ public class KademliaRegularNode implements RegularNode {
         //todo юзать верхний метод, а это в него перенести
         return Optional.ofNullable(networkId)
                 .map(resolver::resolve)
-                .map(unionId -> unionId.computeDistance(unionId))
+                .map(resolver::resolve)
+                .map(unionId -> unionId.computeDistance(unionId.asBytes()))
                 .filter(this::lessThenThreshold)
                 .isPresent();
     }

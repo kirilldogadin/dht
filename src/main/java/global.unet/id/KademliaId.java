@@ -2,26 +2,27 @@ package global.unet.id;
 
 public class KademliaId implements UnionId {
 
-    public static final int SPACE_ID = 160;
+    public static final int BIT_COUNT = 160;
     private final byte[] bytesId;
 
-
+    String idExceptionPrefix = "not valid Id.";
 
     public KademliaId(byte[] bytes) {
-        if (!idIsValid(bytes)){
-            throw new IllegalArgumentException("not valid Id");
-        }
+        checkValid(bytes);
         bytesId = bytes;
     }
 
-    private boolean idIsValid(byte[] bytes) {
-        //todo check format
-        return true;
+
+    private void checkValid(byte[] bytes) {
+        if (bytes.length != BIT_COUNT / Byte.SIZE)
+            throw new IllegalArgumentException(idExceptionPrefix
+                    + "Length must be "
+                    + BIT_COUNT);
     }
 
     @Override
     public int getSpaceOfUnionId() {
-        return SPACE_ID;
+        return BIT_COUNT;
     }
 
     @Override
@@ -30,7 +31,22 @@ public class KademliaId implements UnionId {
     }
 
     @Override
-    public byte[] computeDistance(UnionId in) {
-        return new byte[0];
+    public byte[] computeDistance(byte[] from) {
+       return computeDistance(from, this.asBytes());
+    }
+
+    @Override
+    public byte[] computeDistance(byte[] from, byte[] to) {
+
+        byte[] distance = new byte[from.length];
+        for (int i = 0; i < from.length; i++) {
+            distance[i] = (byte) (from[i] ^ to[i]);
+        }
+        return distance;
+    }
+
+    @Override
+    public byte[] asBytes() {
+        return bytesId;
     }
 }
