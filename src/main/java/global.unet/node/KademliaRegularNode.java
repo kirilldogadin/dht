@@ -18,24 +18,24 @@ public class KademliaRegularNode implements RegularNode {
     private final UnionId selfUnionId;
     private final RoutingNode routingNode;
     private final StorageNode storageNode;
-    private final int tresholdResposibility;
+    private final int tresholdResponsibility;
     private final UnameResolver resolver;
 
-    //Todo тестовый конструктор не знаю зачем
+    //Todo тестовый конструктор не знаю зачем должен быть не тут
     public KademliaRegularNode() {
         resolver = networkId -> null;
         selfUnionId = new KademliaId(new byte[10]);
         RoutingTable routingTable = new XorTreeRoutingTable(selfUnionId, resolver);
         routingNode = new KademliaRoutingNode(new WebsocketServer(),routingTable);
         storageNode = (StorageNode) new Object();
-        tresholdResposibility = 5;
+        tresholdResponsibility = 5;
 
     }
 
-    public KademliaRegularNode(RoutingNode routingNode, StorageNode storageNode, int tresholdResposibility, UnameResolver resolver, UnionId selfUnid){
+    public KademliaRegularNode(RoutingNode routingNode, StorageNode storageNode, int tresholdResponsibility, UnameResolver resolver, UnionId selfUnid){
         this.storageNode = storageNode;
         this.routingNode = routingNode;
-        this.tresholdResposibility = tresholdResposibility;
+        this.tresholdResponsibility = tresholdResponsibility;
         this.resolver = resolver;
         this.selfUnionId = selfUnid;
     }
@@ -107,7 +107,7 @@ public class KademliaRegularNode implements RegularNode {
 
     @Override
     public int thresholdResponsibility() {
-        return tresholdResposibility;
+        return tresholdResponsibility;
     }
 
     @Override

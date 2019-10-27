@@ -5,6 +5,9 @@ import global.unet.node.NodeType;
 
 import java.net.InetAddress;
 
+/**
+ * Информация о ноде
+ */
 public class NodeInfo {
 
     private final InetAddress inetAddress;
