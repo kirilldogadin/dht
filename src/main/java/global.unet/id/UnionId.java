@@ -24,6 +24,7 @@ public interface UnionId extends NetworkId {
      * @return distance between current and from
      */
     byte[] computeDistance(byte[] from);
+    byte[] computeDistance(UnionId from);
 
     /**
      * вычислить дистанцию между двумя UnionId

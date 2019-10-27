@@ -12,6 +12,10 @@ public class KademliaId implements UnionId {
         bytesId = bytes;
     }
 
+    public KademliaId(String id){
+        this(id.getBytes());
+    }
+
 
     private void checkValid(byte[] bytes) {
         if (bytes.length != BIT_COUNT / Byte.SIZE)
@@ -33,6 +37,11 @@ public class KademliaId implements UnionId {
     @Override
     public byte[] computeDistance(byte[] from) {
        return computeDistance(from, this.asBytes());
+    }
+
+    @Override
+    public byte[] computeDistance(UnionId from) {
+        return this.computeDistance(from.asBytes());
     }
 
     @Override
