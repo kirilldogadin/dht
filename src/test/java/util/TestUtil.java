@@ -2,8 +2,6 @@ package util;
 
 import global.unet.id.KademliaId;
 
-import java.util.UUID;
-
 //todo из тестов в Ютилс основного пакета
 public class TestUtil {
 
@@ -34,12 +32,27 @@ public class TestUtil {
         return new KademliaId(generateUnidAsByteArray(bitsCount));
     }
 
-    //TODO Пока не работает т.к. в камделиа зашит 160бит
-    public static KademliaId generate128bitUnid() {
-        //TOdo передалть на 128 бит
-        return new KademliaId(UUID
-                .randomUUID()
-                .toString()
-                .getBytes());
+    /**
+     * Устанавливает нужный байт, остальные заполняет дефолтным
+     * Big endian
+     * Номер Байты и биты слева направа. второй значит 0100 0000
+     * @param byteNumber   номер байта, который надо установить
+     * @param settableByte значение в которое надо установить , например (byte) 128
+     * @param defaultValue в какое из значений установить остальные биты 0/1
+     * @return unionId
+     */
+    public static KademliaId createKademliaIdByTemplate(int byteNumber, byte settableByte, byte defaultValue) {
+        int byteCount = KademliaId.BIT_COUNT / Byte.SIZE;
+        byte[] bytes = new byte[byteCount];
+
+        if (byteNumber > byteCount - 1 || byteNumber < 0) {
+            throw new IllegalArgumentException("byte number must be < " + byteCount + "and > 0");
+        }
+        for (byte curByte : bytes) {
+            curByte = defaultValue;
+        }
+        bytes[byteNumber] = settableByte;
+        return new KademliaId(bytes);
     }
+
 }
