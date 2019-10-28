@@ -1,5 +1,6 @@
 package global.unet.node;
 
+import global.unet.config.NodeConfiguration;
 import global.unet.id.KademliaId;
 import global.unet.id.NetworkId;
 import global.unet.id.UnionId;
@@ -12,6 +13,7 @@ import global.unet.uname.UnameResolver;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public class KademliaRegularNode implements RegularNode {
 
@@ -25,7 +27,8 @@ public class KademliaRegularNode implements RegularNode {
     public KademliaRegularNode() {
         resolver = networkId -> null;
         selfUnionId = new KademliaId(new byte[10]);
-        RoutingTable routingTable = new XorTreeRoutingTable(selfUnionId, resolver);
+        RoutingTable routingTable = new XorTreeRoutingTable(selfUnionId,
+                resolver, NodeConfiguration.builder().capacity(20).build());
         routingNode = new KademliaRoutingNode(new WebsocketServer(),routingTable);
         storageNode = (StorageNode) new Object();
         tresholdResponsibility = 5;
@@ -71,7 +74,7 @@ public class KademliaRegularNode implements RegularNode {
     }
 
     @Override
-    public List<NodeInfo> findClosestNode(NetworkId networkId) {
+    public Set<NodeInfo> findClosestNode(NetworkId networkId) {
         return null;
     }
 

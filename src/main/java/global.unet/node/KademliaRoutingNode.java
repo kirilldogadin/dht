@@ -5,7 +5,7 @@ import global.unet.routing.table.NodeInfo;
 import global.unet.routing.table.RoutingTable;
 import global.unet.server.Server;
 
-import java.util.List;
+import java.util.Set;
 
 public class KademliaRoutingNode implements RoutingNode {
 
@@ -28,7 +28,7 @@ public class KademliaRoutingNode implements RoutingNode {
     }
 
     @Override
-    public List<NodeInfo> findClosestNode(NetworkId networkId) {
+    public Set<NodeInfo> findClosestNode(NetworkId networkId) {
         return routingTable.findClosestUnionIds(networkId);
     }
 

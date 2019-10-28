@@ -3,7 +3,7 @@ package global.unet.routing.table;
 import global.unet.id.NetworkId;
 import global.unet.id.UnionId;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * другая структура, которая хранит данные не в бакетах
@@ -13,12 +13,12 @@ import java.util.List;
 public class XorListStorages implements RoutingTable {
 
     @Override
-    public List<NodeInfo> findClosestUnionIds(UnionId unid) {
+    public Set<NodeInfo> findClosestUnionIds(UnionId unid) {
         return null;
     }
 
     @Override
-    public List<NodeInfo> findClosestUnionIds(NetworkId networkId) {
+    public Set<NodeInfo> findClosestUnionIds(NetworkId networkId) {
         return null;
     }
 

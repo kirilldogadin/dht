@@ -4,8 +4,7 @@ import global.unet.id.NetworkId;
 import global.unet.id.UnionId;
 import global.unet.node.NodeType;
 
-import java.net.InetAddress;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Таблица роутинга. Содержит NodeInfo других нод
@@ -13,8 +12,8 @@ import java.util.List;
  */
 public interface RoutingTable {
 
-    List<NodeInfo> findClosestUnionIds(UnionId unid);
-    List<NodeInfo> findClosestUnionIds(NetworkId networkId);
+    Set<NodeInfo> findClosestUnionIds(UnionId unid);
+    Set<NodeInfo> findClosestUnionIds(NetworkId networkId);
     void addNode(NodeInfo nodeInfo);
 
     /**

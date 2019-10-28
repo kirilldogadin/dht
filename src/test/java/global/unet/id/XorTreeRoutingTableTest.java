@@ -1,12 +1,42 @@
 package global.unet.id;
 
+import global.unet.config.NodeConfiguration;
+import global.unet.routing.table.Bucket;
+import global.unet.routing.table.NodeInfo;
 import global.unet.routing.table.XorTreeRoutingTable;
 import org.junit.Test;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Set;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static util.TestUtil.createKademliaIdByTemplate;
 
 public class XorTreeRoutingTableTest {
+
+
+
+    @Test
+    public void addNodeTest() throws URISyntaxException {
+        //0000 0000 0010 0000
+        KademliaId selfId = createKademliaIdByTemplate(1,(byte) 32, (byte) 0);
+        //0000 0000 0111 1111
+        KademliaId toId = createKademliaIdByTemplate(1,(byte) 127, (byte) 0);
+
+        XorTreeRoutingTable routingTable = new XorTreeRoutingTable(selfId,
+                networkId -> (KademliaId) networkId,
+                NodeConfiguration.builder().build()
+                );
+
+        NodeInfo nodeInfo1 = new NodeInfo(new URI("0.0.0.0"),toId,228);
+
+        routingTable.addNode(nodeInfo1);
+        Set<NodeInfo> closestUnionIds = routingTable.findClosestUnionIds(toId);
+        assertTrue(closestUnionIds.contains(nodeInfo1));
+    }
+
 
     @Test
     public void findBucketNumberTest() {
@@ -17,13 +47,16 @@ public class XorTreeRoutingTableTest {
         //0000 0000 0010 0000
         KademliaId distanse = createKademliaIdByTemplate(1,(byte) 32, (byte) 0);
 
-        XorTreeRoutingTable routingTable = new XorTreeRoutingTable(selfId, null);
+        XorTreeRoutingTable routingTable = new XorTreeRoutingTable(selfId,
+                networkId -> (KademliaId) networkId,
+                NodeConfiguration.builder().build()
+        );
 
         int bucketNumberForUnid = routingTable.getBucketNumberForUnid(distanse.asBytes());
         assertEquals(10,bucketNumberForUnid);
     }
 
-
+    //TODO удалить или изменить
     @Test
     public void findBucketTest() {
 
@@ -32,10 +65,20 @@ public class XorTreeRoutingTableTest {
         //0000 0000 0111 1111
         KademliaId toId = createKademliaIdByTemplate(1,(byte) 127, (byte) 0);
 
-        XorTreeRoutingTable routingTable = new XorTreeRoutingTable(selfId, null);
-        routingTable.findBucket(toId);
+        XorTreeRoutingTable routingTable = new XorTreeRoutingTable(selfId,
+                networkId -> (KademliaId) networkId,
+                NodeConfiguration.builder().build()
+        );
+
+        Bucket bucket = routingTable.findBucket(toId);
+        assertTrue(bucket.getKResponsibility() == 9);
 
 
     }
+
+
+
+
+
 
 }
