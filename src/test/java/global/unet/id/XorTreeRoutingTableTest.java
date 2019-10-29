@@ -1,8 +1,8 @@
 package global.unet.id;
 
-import global.unet.routing.table.Bucket;
-import global.unet.routing.table.NodeInfo;
-import global.unet.routing.table.XorTreeRoutingTable;
+import global.unet.structures.Bucket;
+import global.unet.structures.NodeInfo;
+import global.unet.structures.XorTreeRoutingTable;
 import org.junit.Test;
 
 import java.net.URI;

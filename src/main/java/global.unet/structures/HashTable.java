@@ -1,4 +1,4 @@
-package global.unet.routing.table;
+package global.unet.structures;
 
 /**
  * Хеш-таблица

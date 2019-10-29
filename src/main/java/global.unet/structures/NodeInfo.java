@@ -1,4 +1,4 @@
-package global.unet.routing.table;
+package global.unet.structures;
 
 import global.unet.id.UnionId;
 import global.unet.node.NodeType;

@@ -1,9 +1,9 @@
 package global.unet.node;
 
 import global.unet.id.NetworkId;
-import global.unet.routing.table.NodeInfo;
-import global.unet.routing.table.RoutingTable;
 import global.unet.server.Server;
+import global.unet.structures.NodeInfo;
+import global.unet.structures.RoutingTable;
 
 import java.util.Set;
 
@@ -27,6 +27,7 @@ public class KademliaRoutingNode implements RoutingNode {
     public void shutDown() {
 
     }
+
 
     @Override
     public Set<NodeInfo> findClosestNode(NetworkId networkId) {

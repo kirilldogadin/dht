@@ -1,7 +1,7 @@
 package global.unet.service;
 
 import global.unet.id.UnionId;
-import global.unet.routing.table.NodeInfo;
+import global.unet.structures.NodeInfo;
 
 import java.util.Set;
 

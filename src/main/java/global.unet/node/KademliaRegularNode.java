@@ -2,9 +2,9 @@ package global.unet.node;
 
 import global.unet.id.NetworkId;
 import global.unet.id.UnionId;
-import global.unet.routing.table.NodeInfo;
 import global.unet.service.UnameResolver;
 import global.unet.storage.Content;
+import global.unet.structures.NodeInfo;
 
 import java.util.List;
 import java.util.Optional;

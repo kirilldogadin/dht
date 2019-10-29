@@ -1,4 +1,4 @@
-package global.unet.routing.table;
+package global.unet.structures;
 
 /**
  * Таблица в которой по тегам ищется контент

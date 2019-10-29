@@ -1,8 +1,8 @@
 package global.unet.service;
 
 import global.unet.id.UnionId;
-import global.unet.routing.table.NodeInfo;
-import global.unet.routing.table.RoutingTable;
+import global.unet.structures.NodeInfo;
+import global.unet.structures.RoutingTable;
 
 import java.util.Set;
 
@@ -22,6 +22,5 @@ public class KadUnidRouter implements UnidRouter {
     @Override
     public void addNode(NodeInfo nodeInfo) {
         routingTable.addNode(nodeInfo);
-
     }
 }

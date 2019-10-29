@@ -1,4 +1,4 @@
-package global.unet.routing.table;
+package global.unet.structures;
 
 import global.unet.id.UnionId;
 
@@ -7,6 +7,7 @@ import java.util.Set;
 
 /**
  * Implementation of RoutingTable as KademliaTree
+ * Ничего не знает о резолвинге uname, globalUnid , это ответсвенность не его, это только структура
  */
 //TODO мб конфиг отдельный для этого класса?
 public class XorTreeRoutingTable implements KademliaRoutingTable {
