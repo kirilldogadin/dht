@@ -29,7 +29,7 @@ public class KademliaId implements UnionId {
     }
 
     @Override
-    public int getSpaceOfUnionId() {
+    public int getUnidBitCount() {
         return BIT_COUNT;
     }
 

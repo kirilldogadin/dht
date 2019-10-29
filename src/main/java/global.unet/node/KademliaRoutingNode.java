@@ -10,6 +10,7 @@ import java.util.Set;
 public class KademliaRoutingNode implements RoutingNode {
 
     final Server server;
+    //todo должен быть сервис, а не сразу стукртукра
     final RoutingTable routingTable;
 
     public KademliaRoutingNode(Server server, RoutingTable routingTable) {
@@ -29,7 +30,7 @@ public class KademliaRoutingNode implements RoutingNode {
 
     @Override
     public Set<NodeInfo> findClosestNode(NetworkId networkId) {
-        return routingTable.findClosestUnionIds(networkId);
+        throw new RuntimeException("method not implement yet");
     }
 
     @Override

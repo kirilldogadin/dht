@@ -1,6 +1,5 @@
 package global.unet.id;
 
-import global.unet.config.NodeConfiguration;
 import global.unet.routing.table.Bucket;
 import global.unet.routing.table.NodeInfo;
 import global.unet.routing.table.XorTreeRoutingTable;
@@ -16,6 +15,7 @@ import static util.TestUtil.createKademliaIdByTemplate;
 
 public class XorTreeRoutingTableTest {
 
+    //TODO тесты на конструктор
 
 
     @Test
@@ -25,10 +25,7 @@ public class XorTreeRoutingTableTest {
         //0000 0000 0111 1111
         KademliaId toId = createKademliaIdByTemplate(1,(byte) 127, (byte) 0);
 
-        XorTreeRoutingTable routingTable = new XorTreeRoutingTable(selfId,
-                networkId -> (KademliaId) networkId,
-                NodeConfiguration.builder().build()
-                );
+        XorTreeRoutingTable routingTable = new XorTreeRoutingTable(selfId);
 
         NodeInfo nodeInfo1 = new NodeInfo(new URI("0.0.0.0"),toId,228);
 
@@ -47,10 +44,7 @@ public class XorTreeRoutingTableTest {
         //0000 0000 0010 0000
         KademliaId distanse = createKademliaIdByTemplate(1,(byte) 32, (byte) 0);
 
-        XorTreeRoutingTable routingTable = new XorTreeRoutingTable(selfId,
-                networkId -> (KademliaId) networkId,
-                NodeConfiguration.builder().build()
-        );
+        XorTreeRoutingTable routingTable = new XorTreeRoutingTable(selfId);
 
         int bucketNumberForUnid = routingTable.getBucketNumberForUnid(distanse.asBytes());
         assertEquals(10,bucketNumberForUnid);
@@ -65,10 +59,7 @@ public class XorTreeRoutingTableTest {
         //0000 0000 0111 1111
         KademliaId toId = createKademliaIdByTemplate(1,(byte) 127, (byte) 0);
 
-        XorTreeRoutingTable routingTable = new XorTreeRoutingTable(selfId,
-                networkId -> (KademliaId) networkId,
-                NodeConfiguration.builder().build()
-        );
+        XorTreeRoutingTable routingTable = new XorTreeRoutingTable(selfId);
 
         Bucket bucket = routingTable.findBucket(toId);
         assertTrue(bucket.getKResponsibility() == 9);

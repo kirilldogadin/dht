@@ -1,6 +1,5 @@
 package global.unet.routing.table;
 
-import global.unet.id.NetworkId;
 import global.unet.id.UnionId;
 
 import java.util.Set;
@@ -14,11 +13,6 @@ public class XorListStorages implements RoutingTable {
 
     @Override
     public Set<NodeInfo> findClosestUnionIds(UnionId unid) {
-        return null;
-    }
-
-    @Override
-    public Set<NodeInfo> findClosestUnionIds(NetworkId networkId) {
         return null;
     }
 

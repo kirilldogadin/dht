@@ -13,7 +13,7 @@ public interface UnionId extends NetworkId {
      *
      * @return count bits of space (digit capacity)
      */
-    int getSpaceOfUnionId();
+    int getUnidBitCount();
 
     UnionId computeDistanceAsUnionId(UnionId in);
 

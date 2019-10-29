@@ -2,6 +2,7 @@ package global.unet.id;
 
 /**
  * Rus:
+ * unid1.unid2
  */
-interface GlobalUnionId extends NetworkId {
+public interface GlobalUnionId extends NetworkId {
 }

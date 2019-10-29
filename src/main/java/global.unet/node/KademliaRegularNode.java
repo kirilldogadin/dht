@@ -1,15 +1,10 @@
 package global.unet.node;
 
-import global.unet.config.NodeConfiguration;
-import global.unet.id.KademliaId;
 import global.unet.id.NetworkId;
 import global.unet.id.UnionId;
 import global.unet.routing.table.NodeInfo;
-import global.unet.routing.table.RoutingTable;
-import global.unet.routing.table.XorTreeRoutingTable;
-import global.unet.server.WebsocketServer;
+import global.unet.service.UnameResolver;
 import global.unet.storage.Content;
-import global.unet.uname.UnameResolver;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,18 +17,6 @@ public class KademliaRegularNode implements RegularNode {
     private final StorageNode storageNode;
     private final int tresholdResponsibility;
     private final UnameResolver resolver;
-
-    //Todo тестовый конструктор не знаю зачем должен быть не тут
-    public KademliaRegularNode() {
-        resolver = networkId -> null;
-        selfUnionId = new KademliaId(new byte[10]);
-        RoutingTable routingTable = new XorTreeRoutingTable(selfUnionId,
-                resolver, NodeConfiguration.builder().capacity(20).build());
-        routingNode = new KademliaRoutingNode(new WebsocketServer(),routingTable);
-        storageNode = (StorageNode) new Object();
-        tresholdResponsibility = 5;
-
-    }
 
     public KademliaRegularNode(RoutingNode routingNode, StorageNode storageNode, int tresholdResponsibility, UnameResolver resolver, UnionId selfUnid){
         this.storageNode = storageNode;

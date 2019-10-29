@@ -1,9 +1,6 @@
 package global.unet.routing.table;
 
-import global.unet.config.NodeConfiguration;
-import global.unet.id.NetworkId;
 import global.unet.id.UnionId;
-import global.unet.uname.UnameResolver;
 
 import java.util.Optional;
 import java.util.Set;
@@ -16,22 +13,16 @@ public class XorTreeRoutingTable implements KademliaRoutingTable {
 
     private final UnionId selfNodeUnionId;
     private final Bucket[] buckets;
-    private final UnameResolver resolver;
-    private final NodeConfiguration nodeConfiguration;
     private final BucketFabric bucketFabric;
 
-    public XorTreeRoutingTable(UnionId selfNodeUnionId, UnameResolver resolver, NodeConfiguration nodeConfiguration) {
+    public XorTreeRoutingTable(UnionId selfNodeUnionId, int capacity) {
         this.selfNodeUnionId = selfNodeUnionId;
-        this.resolver = resolver;
-        this.nodeConfiguration = nodeConfiguration;
+        bucketFabric = new BucketFabric(() -> capacity);
+        this.buckets = initializeBuckets(selfNodeUnionId.getUnidBitCount());
+    }
 
-        //Todo фабрику другое место?
-        bucketFabric = new BucketFabric(() ->
-                nodeConfiguration.getCapacity() == null
-                        ? BucketFabric.MAX_CAPACITY_DEFAULT
-                        : nodeConfiguration.getCapacity());
-
-        this.buckets = initializeBuckets(selfNodeUnionId.getSpaceOfUnionId());
+    public XorTreeRoutingTable(UnionId selfNodeUnionId) {
+        this(selfNodeUnionId, BucketFabric.MAX_CAPACITY_DEFAULT);
     }
 
     private Bucket[] initializeBuckets(int bucketsCount) {
@@ -48,15 +39,9 @@ public class XorTreeRoutingTable implements KademliaRoutingTable {
     }
 
     @Override
-    public Set<NodeInfo> findClosestUnionIds(NetworkId networkId) {
-        return findClosestUnionIds(resolveNetworkId(networkId));
-    }
-
-    @Override
     public void addNode(NodeInfo nodeInfo) {
         Optional.ofNullable(nodeInfo)
-                .map(NodeInfo::getNetworkId)
-                .map(this::resolveNetworkId)
+                .map(NodeInfo::getUnionId)
                 .map(this::findBucket)
                 //TODO логика ЕСЛИ найден . Должен быть всегда найден
                 .ifPresent(bucket -> bucket.add(nodeInfo));
@@ -117,10 +102,6 @@ public class XorTreeRoutingTable implements KademliaRoutingTable {
         return 0;
     }
 
-
-    private UnionId resolveNetworkId(NetworkId networkId) {
-        return resolver.resolve(networkId);
-    }
 
 
 }

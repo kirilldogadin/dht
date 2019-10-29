@@ -1,6 +1,6 @@
 package global.unet.routing.table;
 
-import global.unet.id.NetworkId;
+import global.unet.id.UnionId;
 import global.unet.node.NodeType;
 
 import java.net.URI;
@@ -10,38 +10,40 @@ import java.util.Objects;
  * Информация о ноде
  */
 //Todo Equals Hashcode зранятся в джава коллекции
+    //Todo должен хранить не IP, а список IP (несколько сервисов могут работать под одной нодой (иметь одну зону ответсвенности)(реплики)
 public class NodeInfo {
 
     private final URI uri;
-    final NetworkId networkId;
+    final UnionId unionId;
     final int port;
     //Todo должно ли быть здесь с точки зрения организация инкапусляции( находится в другом пакейдже)
     final NodeType nodeType;
 
-    public NodeInfo(URI uri, NetworkId networkId, int port, NodeType nodeType) {
+    public NodeInfo(URI uri, UnionId unionId, int port, NodeType nodeType) {
         this.uri = uri;
-        this.networkId = networkId;
+        this.unionId = unionId;
         this.port = port;
         this.nodeType = nodeType;
     }
+    //Todo валидатор конструтора
 
     /**
      * create as default type REGULAR_NODE
      * @see NodeType#REGULAR_NODE
      * @param uri
-     * @param networkId
+     * @param unionId
      * @param port
      */
-    public NodeInfo(URI uri, NetworkId networkId, int port) {
-        this(uri, networkId, port, NodeType.REGULAR_NODE);
+    public NodeInfo(URI uri, UnionId unionId, int port) {
+        this(uri, unionId, port, NodeType.REGULAR_NODE);
     }
 
     public URI getUri() {
         return uri;
     }
 
-    public NetworkId getNetworkId() {
-        return networkId;
+    public UnionId getUnionId() {
+        return unionId;
     }
 
     public int getPort() {
@@ -59,11 +61,11 @@ public class NodeInfo {
         NodeInfo nodeInfo = (NodeInfo) o;
         return port == nodeInfo.port &&
                 uri.equals(nodeInfo.uri) &&
-                networkId.equals(nodeInfo.networkId);
+                unionId.equals(nodeInfo.unionId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uri, networkId, port);
+        return Objects.hash(uri, unionId, port);
     }
 }
