@@ -4,6 +4,8 @@ import global.unet.id.UnionId;
 
 import java.util.Set;
 
+//TODO дженерифицировать возвращаемое значение
+
 /**
  * Таблица роутинга. Содержит NodeInfo других нод
  * @see NodeInfo

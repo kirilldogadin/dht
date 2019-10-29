@@ -6,6 +6,8 @@ import global.unet.structures.NodeInfo;
 import java.util.HashMap;
 import java.util.Set;
 
+//TODO сделать отдельную таблицу в которой хранить ВСЕ unid известные Ноде, чтобы пинговать их и тд, тогда
+//TODO тогда структура данных ничего не будет знать о NodeInfo
 public class KadContentRouter implements ContentRouter {
 
     private final KadUnidRouter unidRouter;

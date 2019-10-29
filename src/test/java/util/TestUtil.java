@@ -1,6 +1,12 @@
 package util;
 
 import global.unet.id.KademliaId;
+import global.unet.id.UnionId;
+import global.unet.structures.NodeInfo;
+import global.unet.structures.XorTreeRoutingTable;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 //todo из тестов в Ютилс основного пакета
 public class TestUtil {
@@ -36,6 +42,7 @@ public class TestUtil {
      * Устанавливает нужный байт, остальные заполняет дефолтным
      * Big endian
      * Номер Байты и биты слева направа. второй значит 0100 0000
+     *
      * @param byteNumber   номер байта, который надо установить
      * @param settableByte значение в которое надо установить , например (byte) 128
      * @param defaultValue в какое из значений установить остальные биты 0/1
@@ -55,4 +62,31 @@ public class TestUtil {
         return new KademliaId(bytes);
     }
 
+
+    public static UnionId createKademliaFixedId() {
+        //0000 0000 0111 1111
+        KademliaId selfId = createKademliaIdByTemplate(1, (byte) 127, (byte) 0);
+        return selfId;
+
+    }
+
+    public static UnionId createKademliaFixedId2() {
+        //0000 0000 0010 0000
+        return createKademliaIdByTemplate(1, (byte) 32, (byte) 0);
+    }
+
+    public static XorTreeRoutingTable createRoutingTable() {
+        UnionId kademliaFixedId = createKademliaFixedId();
+        XorTreeRoutingTable routingTable = new XorTreeRoutingTable(kademliaFixedId);
+        return routingTable;
+    }
+
+    public static NodeInfo nodeInfo1() {
+        try {
+            return new NodeInfo(new URI("0.0.0.0"), createKademliaFixedId2(), 228);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 }
