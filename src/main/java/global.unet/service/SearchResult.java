@@ -11,7 +11,7 @@ public class SearchResult {
 
     /**
      *
-     * @param nodeInfoSet
+     * @param nodeInfoSet список нод владельцев или ближайших
      * @param holder признак являяется ли список списком владельцев. True да, false - это closest ноды
      */
     public SearchResult(Set<NodeInfo> nodeInfoSet, boolean holder) {

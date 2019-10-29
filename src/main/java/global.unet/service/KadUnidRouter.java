@@ -3,15 +3,28 @@ package global.unet.service;
 import global.unet.id.UnionId;
 import global.unet.structures.NodeInfo;
 import global.unet.structures.RoutingTable;
+import global.unet.structures.XorTreeRoutingTable;
 
 import java.util.Set;
 
+/**
+ * Сервис который отвечает за роутинг внутри Union
+ */
 public class KadUnidRouter implements UnidRouter {
 
     private final RoutingTable routingTable;
 
+    //Todo он сам должен создавать её внутри себя
     public KadUnidRouter(RoutingTable routingTable) {
         this.routingTable = routingTable;
+    }
+
+    public KadUnidRouter(UnionId selfUnionId){
+        this.routingTable = new XorTreeRoutingTable(selfUnionId);
+    }
+
+    public KadUnidRouter(UnionId selfUnionId, int capacity){
+        this.routingTable = new XorTreeRoutingTable(selfUnionId, capacity);
     }
 
     @Override

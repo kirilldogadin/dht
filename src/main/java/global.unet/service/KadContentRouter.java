@@ -1,22 +1,26 @@
 package global.unet.service;
 
 import global.unet.id.UnionId;
-import global.unet.structures.NodeInfo;
 
 import java.util.HashMap;
 import java.util.Set;
 
 //TODO сделать отдельную таблицу в которой хранить ВСЕ unid известные Ноде, чтобы пинговать их и тд, тогда
 //TODO тогда структура данных ничего не будет знать о NodeInfo
+
+/**
+ * Отвечает за обработку запросов связанных с контентом
+ */
 public class KadContentRouter implements ContentRouter {
 
     private final KadUnidRouter unidRouter;
+    //держатели контента, по id контента
+    //TODO создать тип значение по аналогии с NodeInfo = ContentInfo
     private final HashMap<UnionId,Set<UnionId>> holdersByContentId = new HashMap<>();
 
     public KadContentRouter(KadUnidRouter unidRouter) {
         this.unidRouter = unidRouter;
     }
-
 
     @Override
     public SearchResult contentLookup(UnionId unid) {
@@ -38,7 +42,7 @@ public class KadContentRouter implements ContentRouter {
     }
 
     @Override
-    public void addNode(NodeInfo nodeInfo) {
-
+    public void addContentInfo(UnionId unionId, Set<UnionId> unionIds) {
+        holdersByContentId.put(unionId, unionIds);
     }
 }

@@ -56,14 +56,8 @@ public class KademliaRegularNode implements RegularNode {
 
     }
 
-    @Override
     public Set<NodeInfo> findClosestNode(NetworkId networkId) {
         return null;
-    }
-
-    @Override
-    public void addNode(NodeInfo nodeInfo) {
-
     }
 
     @Override
