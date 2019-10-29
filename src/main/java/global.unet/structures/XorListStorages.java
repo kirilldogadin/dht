@@ -12,7 +12,7 @@ import java.util.Set;
 public class XorListStorages implements RoutingTable {
 
     @Override
-    public Set<NodeInfo> findClosestUnionIds(UnionId unid) {
+    public Set<NodeInfo> findClosestNodes(UnionId unid) {
         return null;
     }
 

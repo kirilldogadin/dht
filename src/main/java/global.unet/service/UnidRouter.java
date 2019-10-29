@@ -12,7 +12,8 @@ import java.util.Set;
  */
 public interface UnidRouter {
 
-    Set<NodeInfo> findClosestUnionIds(UnionId unid);
+    //TODO поменять на SearchResult?
+    Set<NodeInfo> findClosestNodes(UnionId unid);
 
     void addNode(NodeInfo nodeInfo);
 

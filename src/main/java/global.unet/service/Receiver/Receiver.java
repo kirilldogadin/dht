@@ -1,9 +1,9 @@
-package global.unet.service;
+package global.unet.service.Receiver;
 
 /**
  * Логика работы с принимаемыми сообщениями
  */
-public class Receiver {
+public interface Receiver {
 
 
 }

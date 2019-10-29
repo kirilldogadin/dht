@@ -35,8 +35,8 @@ public class XorTreeRoutingTable implements KademliaRoutingTable {
     }
 
     @Override
-    public Set<NodeInfo> findClosestUnionIds(UnionId unid) {
-        return findBucket(unid).getNodeInfoList();
+    public Set<NodeInfo> findClosestNodes(UnionId unid) {
+        return findBucket(unid).getNodeInfoSet();
     }
 
     @Override

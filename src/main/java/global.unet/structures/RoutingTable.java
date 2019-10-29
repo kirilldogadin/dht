@@ -13,7 +13,7 @@ import java.util.Set;
  */
 public interface RoutingTable {
 
-    Set<NodeInfo> findClosestUnionIds(UnionId unid);
+    Set<NodeInfo> findClosestNodes(UnionId unid);
     void addNode(NodeInfo nodeInfo);
 
 }

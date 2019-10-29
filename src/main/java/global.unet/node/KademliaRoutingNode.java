@@ -2,20 +2,23 @@ package global.unet.node;
 
 import global.unet.id.NetworkId;
 import global.unet.server.Server;
+import global.unet.service.UnidRouter;
 import global.unet.structures.NodeInfo;
-import global.unet.structures.RoutingTable;
 
 import java.util.Set;
 
+/**
+ * Нода сервис которая выполняет только роутинг. Добавление нод
+ */
 public class KademliaRoutingNode implements RoutingNode {
 
     final Server server;
     //todo должен быть сервис, а не сразу стукртукра
-    final RoutingTable routingTable;
+    final UnidRouter unidRouter;
 
-    public KademliaRoutingNode(Server server, RoutingTable routingTable) {
+    public KademliaRoutingNode(Server server, UnidRouter unidRouter) {
         this.server = server;
-        this.routingTable = routingTable;
+        this.unidRouter = unidRouter;
     }
 
     @Override
@@ -36,6 +39,6 @@ public class KademliaRoutingNode implements RoutingNode {
 
     @Override
     public void addNode(NodeInfo nodeInfo) {
-        routingTable.addNode(nodeInfo);
+        unidRouter.addNode(nodeInfo);
     }
 }

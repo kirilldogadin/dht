@@ -24,7 +24,7 @@ public class Bucket {
         this.kResponsibility = kResponsibility;
     }
 
-    Set<NodeInfo> getNodeInfoList() {
+    Set<NodeInfo> getNodeInfoSet() {
         return nodeInfoSet;
     }
 

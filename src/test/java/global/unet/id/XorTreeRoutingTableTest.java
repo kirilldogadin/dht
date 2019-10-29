@@ -30,7 +30,7 @@ public class XorTreeRoutingTableTest {
         NodeInfo nodeInfo1 = new NodeInfo(new URI("0.0.0.0"),toId,228);
 
         routingTable.addNode(nodeInfo1);
-        Set<NodeInfo> closestUnionIds = routingTable.findClosestUnionIds(toId);
+        Set<NodeInfo> closestUnionIds = routingTable.findClosestNodes(toId);
         assertTrue(closestUnionIds.contains(nodeInfo1));
     }
 

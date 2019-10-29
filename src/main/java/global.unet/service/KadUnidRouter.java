@@ -15,8 +15,8 @@ public class KadUnidRouter implements UnidRouter {
     }
 
     @Override
-    public Set<NodeInfo> findClosestUnionIds(UnionId unid) {
-       return routingTable.findClosestUnionIds(unid);
+    public Set<NodeInfo> findClosestNodes(UnionId unid) {
+       return routingTable.findClosestNodes(unid);
     }
 
     @Override

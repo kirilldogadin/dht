@@ -3,8 +3,6 @@ package global.unet.service;
 import global.unet.id.UnionId;
 import global.unet.structures.NodeInfo;
 
-import java.util.Set;
-
 /**
  *  Сервис отвечает за роутинг внутри UnionId
  *
@@ -21,12 +19,18 @@ public interface ContentRouter {
      * 2. Список ближайших нод
      * Нужен какой-то флаг? ИЛИ NodeInfo это ключ, в
      * Мапе, значение в которой контент , который есть у ноды?
-     *
+     * //TODO возвращаемый тип
      * @param unid contentId
      * @return
      */
-    Set<NodeInfo> findClosestUnionIds(UnionId unid);
+    SearchResult contentLookup(UnionId unid);
 
     void addNode(NodeInfo nodeInfo);
+
+    /**
+     * обработка ноового контента
+     */
+    //void contentInfo();
+
 
 }
