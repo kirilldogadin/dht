@@ -1,13 +1,14 @@
 package global.unet.node;
 
 import global.unet.config.NodeConfiguration;
-import global.unet.id.NetworkId;
+import global.unet.id.BaseId;
 import global.unet.id.UnionId;
+import global.unet.messages.MessageBuilder;
 import global.unet.server.Server;
 import global.unet.server.WebSocketServer;
 import global.unet.service.KadUnidRouter;
-import global.unet.service.Receiver.UnionRouterReceiver;
 import global.unet.service.UnidRouter;
+import global.unet.service.receiver.UnionRouterReceiver;
 import global.unet.structures.NodeInfo;
 
 import java.util.Set;
@@ -24,14 +25,18 @@ public class KademliaRoutingNode implements RoutingNode {
     //todo должен быть сервис, а не сразу стукртукра
     final UnidRouter unidRouter;
     final UnionRouterReceiver unionRouterReceiver;
+    private final MessageBuilder messageBuilder;
 
     // TODO конструктор с конфигом
 
-    public KademliaRoutingNode(UnionId unionId) {
+    public KademliaRoutingNode(UnionId nodeId, UnionId networkId, NodeInfo selfNodeInfo) {
         this.server = new WebSocketServer();
-        this.unidRouter = new KadUnidRouter(unionId);
+        this.unidRouter = new KadUnidRouter(nodeId);
         //TODo подумать над конструкцией, мб цикличную зависимость можно разрешить
-        unionRouterReceiver = new UnionRouterReceiver(unidRouter, server::sendMessage);
+        this.messageBuilder = new MessageBuilder(networkId, selfNodeInfo);
+        this.unionRouterReceiver = new UnionRouterReceiver(unidRouter, server::sendMessage, messageBuilder);
+
+        //TOdo вот тут сделать через билдер, чтобы пока мы не вызовем build сам сервер не создавался
         server.setMessageHandler(unionRouterReceiver::handle);
     }
 
@@ -52,14 +57,12 @@ public class KademliaRoutingNode implements RoutingNode {
 
 
     //TODO вместо этих методов для работы с нодой через http/console также передавать как обработчик
-    // server.setMessageHandler(unionRouterReceiver::handle);
+    // server.setMessageHandler(unionRouterReceiver::handle); только здесь будет  console.setMessageHandler(unionRouterReceiver::handle)
 
-//    @Override
-    public Set<NodeInfo> findClosestNode(NetworkId networkId) {
+    public Set<NodeInfo> findClosestNode(BaseId baseId) {
         throw new RuntimeException("method not implement yet");
     }
 
-//    @Override
     public void addNode(NodeInfo nodeInfo) {
         unidRouter.addNode(nodeInfo);
     }

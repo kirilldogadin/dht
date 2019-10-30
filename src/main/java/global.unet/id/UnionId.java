@@ -5,7 +5,7 @@ package global.unet.id;
  */
 //Todo параметры можно брать из конфига длина, метрика(xor или другая операция)
 //Todo CustomId
-public interface UnionId extends NetworkId {
+public interface UnionId extends BaseId {
 
     /**
      * return space of potential UnionId

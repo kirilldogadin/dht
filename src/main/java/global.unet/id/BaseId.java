@@ -12,5 +12,5 @@ package global.unet.id;
  *
  * Родительский тип
  */
-public interface NetworkId {
+public interface BaseId {
 }

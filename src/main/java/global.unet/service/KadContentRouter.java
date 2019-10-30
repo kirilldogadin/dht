@@ -13,12 +13,12 @@ import java.util.Set;
  */
 public class KadContentRouter implements ContentRouter {
 
-    private final KadUnidRouter unidRouter;
+    private final UnidRouter unidRouter;
     //держатели контента, по id контента
     //TODO создать тип значение по аналогии с NodeInfo = ContentInfo
     private final HashMap<UnionId,Set<UnionId>> holdersByContentId = new HashMap<>();
 
-    public KadContentRouter(KadUnidRouter unidRouter) {
+    public KadContentRouter(UnidRouter unidRouter) {
         this.unidRouter = unidRouter;
     }
 

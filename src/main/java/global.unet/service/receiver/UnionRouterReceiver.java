@@ -1,4 +1,4 @@
-package global.unet.service.Receiver;
+package global.unet.service.receiver;
 
 import global.unet.messages.*;
 import global.unet.service.UnidRouter;
@@ -14,12 +14,16 @@ public class UnionRouterReceiver implements Receiver {
 
     //TOdo id и прочее
 
+    //делать через билдеры
+
     protected final UnidRouter unidRouter;
     protected final Consumer<Message> messageSender;
+    protected final MessageBuilder messageBuilder;
 
-    public UnionRouterReceiver(UnidRouter unidRouter, Consumer<Message> messageSender) {
+    public UnionRouterReceiver(UnidRouter unidRouter, Consumer<Message> messageSender, MessageBuilder messageBuilder) {
         this.unidRouter = unidRouter;
         this.messageSender = messageSender;
+        this.messageBuilder = messageBuilder;
     }
 
     public void handle(Message message){
@@ -48,6 +52,8 @@ public class UnionRouterReceiver implements Receiver {
     }
 
     public void handle(Ping ping){
+        Pong pong = messageBuilder.pong(ping.getDestination());
+        messageSender.accept(pong);
 
     }
 

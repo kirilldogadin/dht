@@ -3,25 +3,18 @@ package global.unet.messages;
 import global.unet.id.UnionId;
 import global.unet.structures.NodeInfo;
 
+import java.util.UUID;
+
 /**
  * Запрос на поиск ближайшнего к Id ноды
  */
-public class ClosestIdReq extends InitReq {
+public class ClosestIdReq extends BaseMessageWithResource {
 
-    private final UnionId resource;
-
-    public ClosestIdReq(NodeInfo source, UnionId resource, int hopes) {
-        super(source, hopes);
-        this.resource = resource;
+    public ClosestIdReq(NodeInfo source, NodeInfo destination, UnionId networkId, UUID messageId, int hopes, UnionId resource) {
+        super(source, destination, networkId, messageId, hopes, resource);
     }
 
-    public ClosestIdReq(NodeInfo source, UnionId resource) {
-        super(source);
-        this.resource = resource;
+    public ClosestIdReq(NodeInfo source, NodeInfo destination, UnionId networkId, UUID messageId, UnionId resource) {
+        super(source, destination, networkId, messageId, resource);
     }
-
-    public UnionId getResource() {
-        return resource;
-    }
-
 }
