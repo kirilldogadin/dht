@@ -26,6 +26,8 @@ public interface UnionId extends BaseId {
     byte[] computeDistance(byte[] from);
     byte[] computeDistance(UnionId from);
 
+
+    //TOdo вынести в метрику
     /**
      * вычислить дистанцию между двумя UnionId
      * @param from

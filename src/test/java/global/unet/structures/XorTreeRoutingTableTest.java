@@ -1,8 +1,6 @@
-package global.unet.id;
+package global.unet.structures;
 
-import global.unet.structures.Bucket;
-import global.unet.structures.NodeInfo;
-import global.unet.structures.XorTreeRoutingTable;
+import global.unet.id.KademliaId;
 import org.junit.Test;
 
 import java.net.URI;
@@ -16,8 +14,6 @@ import static util.TestUtil.createKademliaIdByTemplate;
 public class XorTreeRoutingTableTest {
 
     //TODO тесты на конструктор
-
-
     @Test
     public void addNodeTest() throws URISyntaxException {
         //0000 0000 0010 0000
@@ -63,7 +59,6 @@ public class XorTreeRoutingTableTest {
 
         Bucket bucket = routingTable.findBucket(toId);
         assertTrue(bucket.getKResponsibility() == 9);
-
 
     }
 

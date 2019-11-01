@@ -14,11 +14,6 @@ public class KadUnidRouter implements UnidRouter {
 
     private final RoutingTable routingTable;
 
-    //Todo он сам должен создавать её внутри себя
-    public KadUnidRouter(RoutingTable routingTable) {
-        this.routingTable = routingTable;
-    }
-
     public KadUnidRouter(UnionId selfUnionId){
         this.routingTable = new XorTreeRoutingTable(selfUnionId);
     }

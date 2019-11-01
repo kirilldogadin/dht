@@ -1,5 +1,6 @@
-package global.unet.id;
+package global.unet.router;
 
+import global.unet.id.UnionId;
 import global.unet.service.KadUnidRouter;
 import global.unet.service.UnidRouter;
 import global.unet.structures.NodeInfo;
@@ -15,7 +16,7 @@ public class KadUnidRouterTest extends TestUtil {
     @Test
     public void UnidRouterTest(){
 
-        UnidRouter kadUnidRouter = new KadUnidRouter(createRoutingTable());
+        UnidRouter kadUnidRouter = new KadUnidRouter(createKademliaFixedId());
         UnionId kademliaFixedId2 = createKademliaFixedId2();
         NodeInfo nodeInfo = nodeInfo1();
         kadUnidRouter.addNode(nodeInfo);
