@@ -2,15 +2,19 @@ package global.unet.service.receiver;
 
 import global.unet.messages.*;
 import global.unet.service.router.UnidRouter;
-import global.unet.structures.NodeInfo;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
+
+import static java.util.function.Predicate.not;
 
 /**
  * Логика работы с принимаемыми сообщениями
  * <p>
- * UnionRouter в названниии означает, что только сообщения только с роутингом
+ * UnionRouter в названниии означает, что только сообщения только с роутингом без хранения
+ * TODO набор операций формируется наобором поддерживающих соообщений поэтому разделение роутеров вунутри класса не акктуально
+ *
  */
 public class UnionRouterReceiver implements Receiver {
 
@@ -30,19 +34,23 @@ public class UnionRouterReceiver implements Receiver {
 
     public void handle(Message message) {
 
+        //TODO пока что сделать один простой класс , чтобы протестировать вместе с сервером всю структуру
+
         //TODO идея , обработчик каждого типа это объект
         // Есть список этих обработчиков List<MessageReceiver>
         // При создании UnionRouterReceiver ( или динамически) добавляет список этих обработчиков
-        // Каждый обработчик привязан к конкретному типу сообщения
+        // Каждый обработчик привязан к конкретному типу сообщения и содержит валидатор
         // (Можно динамически расширять протокол если добавлять в classpath объекты сообщения + сериализатор/десериализатор)
         // сделать вспомогательный класс который //аннотацию, которая говорит в каком пакейдже искать классы обработчиков
 
         //TODO метод по первым байтам подбирает тип сообщения,  (не десериализация, она в другом месте маппер или подобное)
         // потом пытается его построить и валидировать
+        // (обработчик сообщения именно сам содержит логику валидации)(валидаторы формата. Можно валидировать уже конкретное сообщение
         // Тип сообщения (или первый байт) ключом при парсинге, а значение обработчикомСообщения/шиной
         // Сообщение отправляется или в шину или нужному обработчику
         // На шину мб подписаны: NodeStat(статистика), NodeHolder(информация о живучести, время ласт активности
-        // В статистика получает все сообщения для каждой ноды.
+        // статистика получает все сообщения для каждой ноды
+        // также сделать log
 
     }
 
@@ -50,9 +58,31 @@ public class UnionRouterReceiver implements Receiver {
      * @param closestIdReq
      * @return
      */
-    public Set<NodeInfo> handle(ClosestIdReq closestIdReq) {
+    public void handle(ClosestIdReq closestIdReq) {
+
+        //Вынести в метод. Скорее всего это делает Нода статистики, или NodeHolder который подписан на ноду статистики
         unidRouter.addNode(closestIdReq.getSource());
-        return unidRouter.findClosestNodes(closestIdReq.getResource());
+
+        Optional.of(closestIdReq)
+                .map(BaseMessageWithResource::getResource)
+                .map(unidRouter::findClosestNodes)
+                .filter(not(Set::isEmpty))
+                .ifPresentOrElse( //если найдены ближайшие
+                        nodeInfos -> //формируем ответное сообщение
+                                Optional.of(ResourceResponse.builder()
+                                        .setNodeInfos(nodeInfos)
+                                        .setMessageId(closestIdReq.getMessageId())
+                                        .setDestination(closestIdReq.getSource()))
+                                        .map(messageBuilder::fillMessageResponse)
+                                        .ifPresent(messageSender),
+
+                        () -> { // если ближайшие не найдены
+                            //подумать может ли такое быть и если да, то как обрабатывать
+                        }
+
+                );
+
+
     }
 
     public void handle(InitReq initReq) {
@@ -61,9 +91,6 @@ public class UnionRouterReceiver implements Receiver {
     }
 
     public void handle(FindContentHolders initReq) {
-        messageBuilder.fillMessage(
-                ClosestIdReq.builder()
-                        .setResource(initReq.getResource()));
 
     }
 
@@ -74,16 +101,19 @@ public class UnionRouterReceiver implements Receiver {
     }
 
     public void handle(Ping ping) {
+        Optional.of(ping)
+                .map(pingMsg -> Pong.builder()
+                        .setDestination(pingMsg.getSource())
+                        .setMessageId(pingMsg.getMessageId())
+                )
+                .map(messageBuilder::fillMessageResponse)
+                .ifPresent(messageSender);
 
-        Pong pong = messageBuilder.fillMessage(
-                Pong.builder()
-                        .setDestination(ping.destination));
-
-        messageSender.accept(pong);
 
     }
 
     public void handle(Pong pong) {
+
 
     }
 

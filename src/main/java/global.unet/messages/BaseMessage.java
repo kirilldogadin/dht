@@ -58,9 +58,9 @@ public abstract class BaseMessage<T extends BaseMessage> implements Message<T> {
         int hopes = HOPES_DEFAULT;
 
         //Важный момент BaseBuilder<T> , без него  в методе T build вовзаращается
-        // не наследник fillMessage, а fillMessage потому что в сеттерах вернеться объект,
+        // не наследник fillMessageRequest, а fillMessageRequest потому что в сеттерах вернеться объект,
         // который может вернуть только BaseBuilder
-        BaseBuilder<T> setMessageId(UUID messageId) {
+        public BaseBuilder<T> setMessageId(UUID messageId) {
             this.messageId = messageId;
             return this;
         }

@@ -11,6 +11,7 @@ import java.util.UUID;
 public class MessageBuilder {
 
 
+    //TODO то что в нижней тудушке в задачи и в готово
     //TODO реализовать билдер для создания сообщений, в котором можно как
     // указывать HOPES так и нет, чтобы не плодить кучу методв с HOPES  и без
 
@@ -31,7 +32,8 @@ public class MessageBuilder {
     }
 
     //старый метод, теперь не актуален, только для сравнения "было/стало"
-    public Pong pong(Pong.PongBuilder pongBuilder){
+    //TODO для написания статьи история одного рефакторинга
+    public Pong pong(Pong.PongBuilder pongBuilder) {
         return pongBuilder
                 .setSource(source)
                 .setNetworkId(networkId)
@@ -39,15 +41,52 @@ public class MessageBuilder {
                 .build();
     }
 
-     public <T extends Message> T fillMessage(BaseMessage.BaseBuilder<T> pongBuilder){
-        return pongBuilder
-                .setSource(source)
-                .setNetworkId(networkId)
+    /**
+     * Заполняет
+     * setSource(source)
+     * networkId
+     * UUID -> randomUUID
+     * Подразумевается, что это сообщение инициатор. В котором будет сгенерировано idсобщения
+     * //TODO id сообщения на самом деле id сессии общения же?
+     * @param pongBuilder
+     * @param <T>
+     * @return
+     */
+    public <T extends Message> T fillMessageRequest(BaseMessage.BaseBuilder<T> pongBuilder) {
+        return fillBaseFieldsOfMsg(pongBuilder)
                 .setMessageId(UUID.randomUUID())
                 .build();
     }
 
-    private UUID generateUUID(){
+    /**
+     * Сохраняет uuid исходного сообщения переданного в pongBuilder
+     *
+     * @param pongBuilder билдер сообщения типа <T>
+     * @param <T>         тип сообщения
+     * @return
+     */
+    public <T extends Message> T fillMessageResponse(BaseMessage.BaseBuilder<T> pongBuilder) {
+        return fillBaseFieldsOfMsg(pongBuilder)
+                .build();
+    }
+
+    /**
+     * Заполняет
+     * source
+     * networkId
+     *
+     * @param pongBuilder
+     * @param <T>
+     * @return
+     */
+    private <T extends Message> BaseMessage.BaseBuilder<T> fillBaseFieldsOfMsg(BaseMessage.BaseBuilder<T> pongBuilder) {
+        return pongBuilder
+                .setSource(source)
+                .setNetworkId(networkId);
+    }
+
+
+    private UUID generateUUID() {
         return UUID.randomUUID();
     }
 }
