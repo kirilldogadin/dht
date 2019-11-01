@@ -1,6 +1,7 @@
-package global.unet.service;
+package global.unet.service.router;
 
 import global.unet.id.UnionId;
+import global.unet.service.SearchResult;
 
 import java.util.Set;
 

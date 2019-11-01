@@ -1,7 +1,7 @@
 package global.unet.service.receiver;
 
 import global.unet.messages.*;
-import global.unet.service.UnidRouter;
+import global.unet.service.router.UnidRouter;
 import global.unet.structures.NodeInfo;
 
 import java.util.Set;
@@ -9,6 +9,8 @@ import java.util.function.Consumer;
 
 /**
  * Логика работы с принимаемыми сообщениями
+ *
+ * UnionRouter в названниии означает, что только сообщения только с роутингом
  */
 public class UnionRouterReceiver implements Receiver {
 
@@ -53,6 +55,9 @@ public class UnionRouterReceiver implements Receiver {
 
     public void handle(Ping ping){
         Pong pong = messageBuilder.pong(ping.getDestination());
+        messageBuilder.initReq(
+                InitReq.builder()
+                .setDestination(ping.getDestination()));
         messageSender.accept(pong);
 
     }

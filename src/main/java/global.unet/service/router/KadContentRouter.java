@@ -1,6 +1,7 @@
-package global.unet.service;
+package global.unet.service.router;
 
 import global.unet.id.UnionId;
+import global.unet.service.SearchResult;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -11,15 +12,18 @@ import java.util.Set;
 /**
  * Отвечает за обработку запросов связанных с контентом
  */
-public class KadContentRouter implements ContentRouter {
+public class KadContentRouter extends KadUnidRouter implements ContentRouter {
 
-    private final UnidRouter unidRouter;
     //держатели контента, по id контента
     //TODO создать тип значение по аналогии с NodeInfo = ContentInfo
     private final HashMap<UnionId,Set<UnionId>> holdersByContentId = new HashMap<>();
 
-    public KadContentRouter(UnidRouter unidRouter) {
-        this.unidRouter = unidRouter;
+    public KadContentRouter(UnionId selfUnionId) {
+        super(selfUnionId);
+    }
+
+    public KadContentRouter(UnionId selfUnionId, int capacity) {
+        super(selfUnionId, capacity);
     }
 
     @Override

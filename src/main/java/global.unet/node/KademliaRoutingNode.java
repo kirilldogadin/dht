@@ -6,9 +6,9 @@ import global.unet.id.UnionId;
 import global.unet.messages.MessageBuilder;
 import global.unet.server.Server;
 import global.unet.server.WebSocketServer;
-import global.unet.service.KadUnidRouter;
-import global.unet.service.UnidRouter;
 import global.unet.service.receiver.UnionRouterReceiver;
+import global.unet.service.router.KadUnidRouter;
+import global.unet.service.router.UnidRouter;
 import global.unet.structures.NodeInfo;
 
 import java.util.Set;
