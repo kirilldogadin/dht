@@ -1,5 +1,7 @@
 package global.unet.id;
 
+import java.io.Serializable;
+
 /**
  * Eng:
  * Id in network.
@@ -12,5 +14,5 @@ package global.unet.id;
  *
  * Родительский тип
  */
-public interface BaseId {
+public interface BaseId extends Serializable {
 }

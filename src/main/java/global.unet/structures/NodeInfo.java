@@ -3,6 +3,7 @@ package global.unet.structures;
 import global.unet.id.UnionId;
 import global.unet.node.NodeType;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.Objects;
 
@@ -11,7 +12,7 @@ import java.util.Objects;
  */
 //Todo Equals Hashcode зранятся в джава коллекции
     //Todo должен хранить не IP, а список IP (несколько сервисов могут работать под одной нодой (иметь одну зону ответсвенности)(реплики)
-public class NodeInfo {
+public class NodeInfo implements Serializable {
 
     private final URI uri;
     final UnionId unionId;

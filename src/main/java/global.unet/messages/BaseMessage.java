@@ -12,11 +12,11 @@ public abstract class BaseMessage<T extends BaseMessage> implements Message<T> {
 
     static final int HOPES_DEFAULT = 50;
 
-    private final UUID messageId;
-    private final UnionId networkId;
-    private final NodeInfo source;
-    public final NodeInfo destination;
-    private final int hopes;
+    final UUID messageId;
+    final UnionId networkId;
+    final NodeInfo source;
+    final NodeInfo destination;
+    final int hopes;
 
     BaseMessage(NodeInfo source, NodeInfo destination, UnionId networkId, UUID messageId, int hopes) {
         this.messageId = messageId;

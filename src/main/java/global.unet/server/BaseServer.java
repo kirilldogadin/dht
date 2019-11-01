@@ -10,6 +10,7 @@ public abstract class BaseServer implements Server {
     //TODo можно переписать на фабрику которая будет
     Consumer<Message> messageHandler;
     private boolean messageHandlerIsSet = false;
+    boolean isRunning = false;
 
     protected BaseServer() {
 
@@ -24,16 +25,7 @@ public abstract class BaseServer implements Server {
 
     }
 
-    @Override
-    public void sendMessage(Message message) {
 
-    }
-
-    @Override
-    public void start() {
-        checkMessageHandler();
-
-    }
 
     private void checkMessageHandler(){
         if (!messageHandlerIsSet){

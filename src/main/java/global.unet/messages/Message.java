@@ -1,6 +1,8 @@
 package global.unet.messages;
 
-public interface Message<T extends Message> {
+import java.io.Serializable;
+
+public interface Message<T extends Message> extends Serializable {
 
     //PongBuilder<? extends T> builder1();
 

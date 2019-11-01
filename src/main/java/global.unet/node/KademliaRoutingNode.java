@@ -4,8 +4,8 @@ import global.unet.config.NodeConfiguration;
 import global.unet.id.BaseId;
 import global.unet.id.UnionId;
 import global.unet.messages.MessageBuilder;
+import global.unet.server.BlockingServer;
 import global.unet.server.Server;
-import global.unet.server.WebSocketServer;
 import global.unet.service.receiver.UnionRouterReceiver;
 import global.unet.service.router.KadUnidRouter;
 import global.unet.service.router.UnidRouter;
@@ -30,7 +30,7 @@ public class KademliaRoutingNode implements RoutingNode {
     // TODO конструктор с конфигом
 
     public KademliaRoutingNode(UnionId nodeId, UnionId networkId, NodeInfo selfNodeInfo) {
-        this.server = new WebSocketServer();
+        this.server = new BlockingServer();
         this.unidRouter = new KadUnidRouter(nodeId);
         //TODo подумать над конструкцией, мб цикличную зависимость можно разрешить
         this.messageBuilder = new MessageBuilder(networkId, selfNodeInfo);

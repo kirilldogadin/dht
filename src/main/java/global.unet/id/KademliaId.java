@@ -4,7 +4,7 @@ package global.unet.id;
  * TODO по аналогии с фабрикой бакетов сделать фабрику Union
  * в котором можно забивать ID
  */
-public class KademliaId implements UnionId {
+public class KademliaId implements UnionId{
 
     public static final int BIT_COUNT = 160;
     private final byte[] bytesId;

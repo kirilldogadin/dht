@@ -13,14 +13,12 @@ import static java.util.function.Predicate.not;
  * Логика работы с принимаемыми сообщениями
  * <p>
  * UnionRouter в названниии означает, что только сообщения только с роутингом без хранения
- * TODO набор операций формируется наобором поддерживающих соообщений поэтому разделение роутеров вунутри класса не акктуально
- *
+ * TODO набор операций формируется наобором поддерживающих соообщений
+ * поэтому разделение роутеров как классов не акктуально
  */
 public class UnionRouterReceiver implements Receiver {
 
     //TOdo id и прочее
-
-
     //TOdo в будущем может иметь или несколько роутеров или несколько таблиц внутри роутера
     protected final UnidRouter unidRouter;
     protected final Consumer<Message> messageSender;
@@ -52,6 +50,9 @@ public class UnionRouterReceiver implements Receiver {
         // статистика получает все сообщения для каждой ноды
         // также сделать log
 
+        //TODO
+        handle((Ping)message);
+
     }
 
     /**
@@ -67,8 +68,7 @@ public class UnionRouterReceiver implements Receiver {
                 .map(BaseMessageWithResource::getResource)
                 .map(unidRouter::findClosestNodes)
                 .filter(not(Set::isEmpty))
-                .ifPresentOrElse( //если найдены ближайшие
-                        nodeInfos -> //формируем ответное сообщение
+                .ifPresentOrElse(nodeInfos ->
                                 Optional.of(ResourceResponse.builder()
                                         .setNodeInfos(nodeInfos)
                                         .setMessageId(closestIdReq.getMessageId())
@@ -78,10 +78,7 @@ public class UnionRouterReceiver implements Receiver {
 
                         () -> { // если ближайшие не найдены
                             //подумать может ли такое быть и если да, то как обрабатывать
-                        }
-
-                );
-
+                        });
 
     }
 
@@ -101,6 +98,7 @@ public class UnionRouterReceiver implements Receiver {
     }
 
     public void handle(Ping ping) {
+        System.out.println(ping);
         Optional.of(ping)
                 .map(pingMsg -> Pong.builder()
                         .setDestination(pingMsg.getSource())
