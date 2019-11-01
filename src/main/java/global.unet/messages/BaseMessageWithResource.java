@@ -26,4 +26,14 @@ public abstract class BaseMessageWithResource extends BaseMessage{
     public UnionId getResource() {
         return resource;
     }
+
+    public abstract static class Builder<T extends BaseMessageWithResource> extends BaseMessage.BaseBuilder<T>{
+
+        UnionId resource;
+
+        public Builder<T> setResource(UnionId resource) {
+            this.resource = resource;
+            return this;
+        }
+    }
 }

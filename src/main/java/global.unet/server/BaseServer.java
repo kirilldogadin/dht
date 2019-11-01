@@ -1,6 +1,6 @@
 package global.unet.server;
 
-import global.unet.exception.UnionConfigurationException;
+import global.unet.exception.UnionServerException;
 import global.unet.messages.Message;
 
 import java.util.function.Consumer;
@@ -31,13 +31,13 @@ public abstract class BaseServer implements Server {
 
     @Override
     public void start() {
-        checkConditions();
+        checkMessageHandler();
 
     }
 
-    private void checkConditions(){
+    private void checkMessageHandler(){
         if (!messageHandlerIsSet){
-            throw new UnionConfigurationException("Not set messageHandler");
+            throw new UnionServerException("Didn't set a messageHandler");
         }
     }
 }

@@ -14,6 +14,8 @@ public class MessageBuilder {
     //TODO реализовать билдер для создания сообщений, в котором можно как
     // указывать HOPES так и нет, чтобы не плодить кучу методв с HOPES  и без
 
+
+    //TODO локальные классы - можно сделать лямбдами?
     //Само поле Hopes финальное, билдер создает дефолтное значение, если не указано другое
 
     //не глобальный адрес , потому что сообщение не знает о вложенности
@@ -28,25 +30,21 @@ public class MessageBuilder {
         this.source = source;
     }
 
-    //TODO сделать эту логику общей
-    //Пример. Теперь больше не надо создавать кучу методов с разным кол-вом аргументов
-    //некоторые
-    public InitReq initReq(InitReq.Builder initReqBuilder){
-        return initReqBuilder
+    //старый метод, теперь не актуален, только для сравнения "было/стало"
+    public Pong pong(Pong.PongBuilder pongBuilder){
+        return pongBuilder
                 .setSource(source)
                 .setNetworkId(networkId)
                 .setMessageId(UUID.randomUUID())
                 .build();
-
     }
 
-    public Pong pong(NodeInfo destination){
-
-        return new Pong(
-                source,
-                destination,
-                networkId,
-                generateUUID());
+     public <T extends Message> T fillMessage(BaseMessage.BaseBuilder<T> pongBuilder){
+        return pongBuilder
+                .setSource(source)
+                .setNetworkId(networkId)
+                .setMessageId(UUID.randomUUID())
+                .build();
     }
 
     private UUID generateUUID(){

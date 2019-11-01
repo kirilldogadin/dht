@@ -17,44 +17,19 @@ public class InitReq extends BaseMessage {
 
     //TOdo подумать мб передавать тип класса и тп
     // https://habr.com/ru/company/jugru/blog/438866/
+    // https://gist.github.com/lerouxrgd/87c1f71ba6a447c6311d172fe61c2924
+
+    //по идее определение в подтипе вполне должно устроить
+    //то есть не надо городить асбтрактный метод, потому что обращение все равно идет черех конктретный класс
+    //это имело бы смысл если бы мы обращались через не знаю какой подтип
     public static Builder builder() {
         return new Builder();
     }
 
-
     //Todo подумать как вынести в Base
-    public static class Builder {
-        private UUID messageId;
-        private UnionId networkId;
-        private NodeInfo source;
-        private NodeInfo destination;
-        private int hopes = HOPES_DEFAULT;
+    static class Builder extends BaseBuilder<InitReq> {
 
-        Builder setMessageId(UUID messageId) {
-            this.messageId = messageId;
-            return this;
-        }
-
-        Builder setNetworkId(UnionId networkId) {
-            this.networkId = networkId;
-            return this;
-        }
-
-        Builder setSource(NodeInfo source) {
-            this.source = source;
-            return this;
-        }
-
-        public Builder setDestination(NodeInfo destination) {
-            this.destination = destination;
-            return this;
-        }
-
-        public Builder setHopes(int hopes) {
-            this.hopes = hopes;
-            return this;
-        }
-
+        @Override
         InitReq build() {
             return new InitReq(
                     source,

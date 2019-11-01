@@ -15,7 +15,7 @@ public abstract class BaseMessage<T extends BaseMessage> implements Message<T> {
     private final UUID messageId;
     private final UnionId networkId;
     private final NodeInfo source;
-    private final NodeInfo destination;
+    public final NodeInfo destination;
     private final int hopes;
 
     BaseMessage(NodeInfo source, NodeInfo destination, UnionId networkId, UUID messageId, int hopes) {
@@ -50,39 +50,42 @@ public abstract class BaseMessage<T extends BaseMessage> implements Message<T> {
         return destination;
     }
 
-    public static abstract class BaseBuilder<T> implements Builder{
+    public static abstract class BaseBuilder<T extends Message> {
         UUID messageId;
         UnionId networkId;
         NodeInfo source;
         NodeInfo destination;
         int hopes = HOPES_DEFAULT;
 
-        BaseBuilder setMessageId(UUID messageId) {
+        //Важный момент BaseBuilder<T> , без него  в методе T build вовзаращается
+        // не наследник fillMessage, а fillMessage потому что в сеттерах вернеться объект,
+        // который может вернуть только BaseBuilder
+        BaseBuilder<T> setMessageId(UUID messageId) {
             this.messageId = messageId;
             return this;
         }
 
-        BaseBuilder setNetworkId(UnionId networkId) {
+        BaseBuilder<T> setNetworkId(UnionId networkId) {
             this.networkId = networkId;
             return this;
         }
 
-        BaseBuilder setSource(NodeInfo source) {
+        BaseBuilder<T> setSource(NodeInfo source) {
             this.source = source;
             return this;
         }
 
-        public BaseBuilder setDestination(NodeInfo destination) {
+        public BaseBuilder<T> setDestination(NodeInfo destination) {
             this.destination = destination;
             return this;
         }
 
-        public BaseBuilder setHopes(int hopes) {
+        public BaseBuilder<T> setHopes(int hopes) {
             this.hopes = hopes;
             return this;
         }
 
-        public abstract T build();
+        abstract T build();
 
     }
 

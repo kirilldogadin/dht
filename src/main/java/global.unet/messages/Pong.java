@@ -7,26 +7,19 @@ import java.util.UUID;
 
 public class Pong extends BaseMessage<Pong> {
 
-    public Pong(NodeInfo source, NodeInfo destination, UnionId networkId, UUID messageId, int hopes) {
+    private Pong(NodeInfo source, NodeInfo destination, UnionId networkId, UUID messageId, int hopes) {
         super(source, destination, networkId, messageId, hopes);
     }
 
-    public Pong(NodeInfo source, NodeInfo destination, UnionId networkId, UUID messageId) {
-        super(source, destination, networkId, messageId);
+    //TODO нет своих полей
+    public static BaseBuilder<Pong> builder() {
+        return new PongBuilder();
     }
 
-    //@Override
-    public Builder<Pong> builder1() {
-        return new PongBaseBuilder();
-    }
-
-
-
-
-    public static class PongBaseBuilder extends BaseBuilder<Pong> {
+    static class PongBuilder extends BaseBuilder<Pong> {
 
         @Override
-        public Pong build() {
+        Pong build() {
             return new Pong(
                     source,
                     destination,

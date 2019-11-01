@@ -10,11 +10,29 @@ import java.util.UUID;
  */
 public class ClosestIdReq extends BaseMessageWithResource {
 
-    public ClosestIdReq(NodeInfo source, NodeInfo destination, UnionId networkId, UUID messageId, int hopes, UnionId resource) {
+    private ClosestIdReq(NodeInfo source, NodeInfo destination, UnionId networkId, UUID messageId, int hopes, UnionId resource) {
         super(source, destination, networkId, messageId, hopes, resource);
     }
 
-    public ClosestIdReq(NodeInfo source, NodeInfo destination, UnionId networkId, UUID messageId, UnionId resource) {
-        super(source, destination, networkId, messageId, resource);
+
+    //TODO подумать над названием. Мб это дто?
+    public static BaseMessageWithResource.Builder<ClosestIdReq> builder() {
+        return new Builder();
     }
+
+    private static class Builder extends BaseMessageWithResource.Builder<ClosestIdReq> {
+
+        @Override
+        ClosestIdReq build() {
+            return new ClosestIdReq(
+                    source,
+                    destination,
+                    networkId,
+                    messageId,
+                    hopes,
+                    resource);
+        }
+    }
+
+
 }
