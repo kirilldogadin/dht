@@ -4,7 +4,7 @@ import global.unet.id.UnionId;
 import global.unet.messages.ContentHolders;
 import global.unet.messages.FindContentHolders;
 import global.unet.messages.Message;
-import global.unet.messages.MessageBuilder;
+import global.unet.messages.OneUnionMessageFiller;
 import global.unet.service.SearchResult;
 import global.unet.service.router.KadContentRouter;
 import global.unet.service.router.UnidRouter;
@@ -18,8 +18,8 @@ public class RegularReceiver extends UnionRouterReceiver {
 
     private final KadContentRouter contentRouter;
 
-    public RegularReceiver(UnidRouter unidRouter, KadContentRouter contentRouter, Consumer<Message> messageSender, MessageBuilder messageBuilder) {
-        super(unidRouter, messageSender, messageBuilder);
+    public RegularReceiver(UnidRouter unidRouter, KadContentRouter contentRouter, Consumer<Message> messageSender, OneUnionMessageFiller oneUnionMessageFiller) {
+        super(unidRouter, messageSender, oneUnionMessageFiller);
         this.contentRouter = contentRouter;
 
     }

@@ -7,8 +7,9 @@ import java.util.UUID;
 
 /**
  * создает сообщения , а также отвечает за генерацию ID сообщения
+ * Для одного юниона работает
  */
-public class MessageBuilder {
+public class OneUnionMessageFiller {
 
 
     //TODO то что в нижней тудушке в задачи и в готово
@@ -19,14 +20,16 @@ public class MessageBuilder {
     //TODO локальные классы - можно сделать лямбдами?
     //Само поле Hopes финальное, билдер создает дефолтное значение, если не указано другое
 
-    //не глобальный адрес , потому что сообщение не знает о вложенности
-    final UnionId networkId;
-    final NodeInfo source;
 
     //Todo а вот IP может
     // меняться
     // быть истинно видным только снаружи (за натом
-    public MessageBuilder(UnionId networkId, NodeInfo source) {
+    //не глобальный адрес , потому что сообщение не знает о вложенности
+    final UnionId networkId;
+    final NodeInfo source;
+
+
+    public OneUnionMessageFiller(UnionId networkId, NodeInfo source) {
         this.networkId = networkId;
         this.source = source;
     }
@@ -41,6 +44,20 @@ public class MessageBuilder {
                 .build();
     }
 
+
+    /**
+     * Заполняет
+     * setSource(source)
+     * networkId
+     * UUID -> randomUUID Если он не задан
+     *
+     */
+    public <T extends Message> T createFullMessage(BaseMessage.BaseBuilder<T> pongBuilder) {
+        return pongBuilder.messageId == null
+                ? createFullMessageRequest(pongBuilder)
+                : createFullMessageResponse(pongBuilder);
+    }
+
     /**
      * Заполняет
      * setSource(source)
@@ -52,7 +69,7 @@ public class MessageBuilder {
      * @param <T>
      * @return
      */
-    public <T extends Message> T fillMessageRequest(BaseMessage.BaseBuilder<T> pongBuilder) {
+    public <T extends Message> T createFullMessageRequest(BaseMessage.BaseBuilder<T> pongBuilder) {
         return fillBaseFieldsOfMsg(pongBuilder)
                 .setMessageId(UUID.randomUUID())
                 .build();
@@ -65,7 +82,7 @@ public class MessageBuilder {
      * @param <T>         тип сообщения
      * @return
      */
-    public <T extends Message> T fillMessageResponse(BaseMessage.BaseBuilder<T> pongBuilder) {
+    public <T extends Message> T createFullMessageResponse(BaseMessage.BaseBuilder<T> pongBuilder) {
         return fillBaseFieldsOfMsg(pongBuilder)
                 .build();
     }

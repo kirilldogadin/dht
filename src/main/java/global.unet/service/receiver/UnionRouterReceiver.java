@@ -22,12 +22,12 @@ public class UnionRouterReceiver implements Receiver {
     //TOdo в будущем может иметь или несколько роутеров или несколько таблиц внутри роутера
     protected final UnidRouter unidRouter;
     protected final Consumer<Message> messageSender;
-    protected final MessageBuilder messageBuilder;
+    protected final OneUnionMessageFiller oneUnionMessageFiller;
 
-    public UnionRouterReceiver(UnidRouter unidRouter, Consumer<Message> messageSender, MessageBuilder messageBuilder) {
+    public UnionRouterReceiver(UnidRouter unidRouter, Consumer<Message> messageSender, OneUnionMessageFiller oneUnionMessageFiller) {
         this.unidRouter = unidRouter;
         this.messageSender = messageSender;
-        this.messageBuilder = messageBuilder;
+        this.oneUnionMessageFiller = oneUnionMessageFiller;
     }
 
     public void handle(Message message) {
@@ -73,7 +73,7 @@ public class UnionRouterReceiver implements Receiver {
                                         .setNodeInfos(nodeInfos)
                                         .setMessageId(closestIdReq.getMessageId())
                                         .setDestination(closestIdReq.getSource()))
-                                        .map(messageBuilder::fillMessageResponse)
+                                        .map(oneUnionMessageFiller::createFullMessageResponse)
                                         .ifPresent(messageSender),
 
                         () -> { // если ближайшие не найдены
@@ -104,7 +104,7 @@ public class UnionRouterReceiver implements Receiver {
                         .setDestination(pingMsg.getSource())
                         .setMessageId(pingMsg.getMessageId())
                 )
-                .map(messageBuilder::fillMessageResponse)
+                .map(oneUnionMessageFiller::createFullMessage)
                 .ifPresent(messageSender);
 
 
