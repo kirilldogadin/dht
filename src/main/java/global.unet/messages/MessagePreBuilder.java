@@ -9,12 +9,7 @@ import java.util.UUID;
  * создает сообщения , а также отвечает за генерацию ID сообщения
  * Для одного юниона работает
  */
-public class OneUnionMessageFiller {
-
-
-    //TODO то что в нижней тудушке в задачи и в готово
-    //TODO реализовать билдер для создания сообщений, в котором можно как
-    // указывать HOPES так и нет, чтобы не плодить кучу методв с HOPES  и без
+public class MessagePreBuilder {
 
 
     //TODO локальные классы - можно сделать лямбдами?
@@ -29,7 +24,7 @@ public class OneUnionMessageFiller {
     final NodeInfo source;
 
 
-    public OneUnionMessageFiller(UnionId networkId, NodeInfo source) {
+    public MessagePreBuilder(UnionId networkId, NodeInfo source) {
         this.networkId = networkId;
         this.source = source;
     }
@@ -42,6 +37,14 @@ public class OneUnionMessageFiller {
                 .setNetworkId(networkId)
                 .setMessageId(UUID.randomUUID())
                 .build();
+    }
+
+    //TODO суть метода в том , чтобы получить билдер для конретного типа,
+    // чтобы заполнить в нем Пребилдер и получить билдер, который используется
+    // БЕЗ передачи в него билдера
+
+    public <T extends Message> BaseMessage.BaseBuilder<T> builder(Buildable<T> buildable){
+        return buildable.builder(this::fillMessageAsResponse);
     }
 
 
@@ -87,6 +90,10 @@ public class OneUnionMessageFiller {
                 .build();
     }
 
+    public <T extends Message> void fillMessageAsResponse(BaseMessage.BaseBuilder<T> pongBuilder) {
+        fillBaseFieldsOfMsg(pongBuilder);
+    }
+
     /**
      * Заполняет
      * source
@@ -101,6 +108,9 @@ public class OneUnionMessageFiller {
                 .setSource(source)
                 .setNetworkId(networkId);
     }
+
+
+
 
 
     private UUID generateUUID() {

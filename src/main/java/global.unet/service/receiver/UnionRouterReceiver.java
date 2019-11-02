@@ -22,12 +22,16 @@ public class UnionRouterReceiver implements Receiver {
     //TOdo в будущем может иметь или несколько роутеров или несколько таблиц внутри роутера
     protected final UnidRouter unidRouter;
     protected final Consumer<Message> messageSender;
-    protected final OneUnionMessageFiller oneUnionMessageFiller;
+    protected final MessagePreBuilder messagePreBuilder;
 
-    public UnionRouterReceiver(UnidRouter unidRouter, Consumer<Message> messageSender, OneUnionMessageFiller oneUnionMessageFiller) {
+    //TODO для всех типов все фарбрики? мб список фабрик
+    private final MessageBuilderFabrice<Pong> pongBuilderFabrice;
+
+    public UnionRouterReceiver(UnidRouter unidRouter, Consumer<Message> messageSender, MessagePreBuilder messagePreBuilder) {
         this.unidRouter = unidRouter;
         this.messageSender = messageSender;
-        this.oneUnionMessageFiller = oneUnionMessageFiller;
+        this.messagePreBuilder = messagePreBuilder;
+        pongBuilderFabrice = new PongBuilderFabrice(messagePreBuilder);
     }
 
     public void handle(Message message) {
@@ -51,7 +55,7 @@ public class UnionRouterReceiver implements Receiver {
         // также сделать log
 
         //TODO
-        handle((Ping)message);
+        handle((Ping) message);
 
     }
 
@@ -69,11 +73,11 @@ public class UnionRouterReceiver implements Receiver {
                 .map(unidRouter::findClosestNodes)
                 .filter(not(Set::isEmpty))
                 .ifPresentOrElse(nodeInfos ->
-                                Optional.of(ResourceResponse.builder()
+                                Optional.of(ResourceResponse.builder(messagePreBuilder::fillMessageAsResponse)
                                         .setNodeInfos(nodeInfos)
                                         .setMessageId(closestIdReq.getMessageId())
-                                        .setDestination(closestIdReq.getSource()))
-                                        .map(oneUnionMessageFiller::createFullMessageResponse)
+                                        .setDestination(closestIdReq.getSource())
+                                        .build())
                                         .ifPresent(messageSender),
 
                         () -> { // если ближайшие не найдены
@@ -100,11 +104,10 @@ public class UnionRouterReceiver implements Receiver {
     public void handle(Ping ping) {
         System.out.println(ping);
         Optional.of(ping)
-                .map(pingMsg -> Pong.builder()
+                .map(pingMsg -> pongBuilderFabrice.builder()
                         .setDestination(pingMsg.getSource())
                         .setMessageId(pingMsg.getMessageId())
-                )
-                .map(oneUnionMessageFiller::createFullMessage)
+                        .build())
                 .ifPresent(messageSender);
 
 

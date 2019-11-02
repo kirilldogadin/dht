@@ -4,6 +4,7 @@ import global.unet.id.UnionId;
 import global.unet.structures.NodeInfo;
 
 import java.util.UUID;
+import java.util.function.Consumer;
 
 /**
  * Базовые поля с источником
@@ -30,6 +31,11 @@ public abstract class BaseMessageWithResource extends BaseMessage{
     public abstract static class Builder<T extends BaseMessageWithResource> extends BaseMessage.BaseBuilder<T>{
 
         UnionId resource;
+
+        Builder(Consumer<BaseBuilder<T>> preBuilder) {
+            super(preBuilder);
+        }
+
 
         public Builder<T> setResource(UnionId resource) {
             this.resource = resource;

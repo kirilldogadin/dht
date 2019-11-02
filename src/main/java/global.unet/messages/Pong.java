@@ -4,6 +4,7 @@ import global.unet.id.UnionId;
 import global.unet.structures.NodeInfo;
 
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public class Pong extends BaseMessage<Pong> {
 
@@ -11,15 +12,19 @@ public class Pong extends BaseMessage<Pong> {
         super(source, destination, networkId, messageId, hopes);
     }
 
-    //TODO нет своих полей
-    public static BaseBuilder<Pong> builder() {
-        return new PongBuilder();
+    static BaseBuilder<Pong> builder(Consumer<BaseBuilder<Pong>> preBuilder) {
+        return new PongBuilder(preBuilder);
     }
+
 
     static class PongBuilder extends BaseBuilder<Pong> {
 
+        PongBuilder(Consumer<BaseBuilder<Pong>> preBuilder) {
+            super(preBuilder);
+        }
+
         @Override
-        Pong build() {
+        Pong finalBuild() {
             return new Pong(
                     source,
                     destination,
@@ -29,5 +34,6 @@ public class Pong extends BaseMessage<Pong> {
 
             );
         }
+
     }
 }

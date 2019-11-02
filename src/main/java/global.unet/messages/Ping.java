@@ -5,6 +5,7 @@ import global.unet.structures.NodeInfo;
 
 import java.io.Serializable;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public class Ping extends BaseMessage implements Serializable {
 
@@ -12,14 +13,19 @@ public class Ping extends BaseMessage implements Serializable {
         super(source, destination, networkId, messageId, hopes);
     }
 
-    public static BaseBuilder<Ping> builder() {
-        return new Builder();
+    public static BaseBuilder<Ping> builder(Consumer<BaseBuilder<Ping>> preBuilder) {
+        return new Builder(preBuilder);
     }
 
     static class Builder extends BaseBuilder<Ping> {
 
+
+        Builder(Consumer<BaseBuilder<Ping>> preBuilder) {
+            super(preBuilder);
+        }
+
         @Override
-        Ping build() {
+        Ping finalBuild() {
             return new Ping(
                     source,
                     destination,

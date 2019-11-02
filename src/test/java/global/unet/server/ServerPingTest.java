@@ -1,7 +1,7 @@
 package global.unet.server;
 
 import global.unet.id.UnionId;
-import global.unet.messages.OneUnionMessageFiller;
+import global.unet.messages.MessagePreBuilder;
 import global.unet.messages.Ping;
 import global.unet.node.KademliaRoutingNode;
 import global.unet.structures.NodeInfo;
@@ -24,11 +24,12 @@ public class ServerPingTest extends TestUtil {
 
         new Thread(serverStarting).start();
 
-        OneUnionMessageFiller oneUnionMessageFiller = new OneUnionMessageFiller(nodeId, selfNodeInfo);
+        MessagePreBuilder messagePreBuilder = new MessagePreBuilder(nodeId, selfNodeInfo);
         Runnable sendingMessage = () -> {
 
-            client.sendMessage(oneUnionMessageFiller
+            client.sendMessage(messagePreBuilder
                     .createFullMessageRequest(
+                            //TODO создать фабрику билдера
                             Ping.builder()
                                     .setDestination(selfNodeInfo)
 
@@ -36,7 +37,7 @@ public class ServerPingTest extends TestUtil {
         };
 
 
-        client.sendMessage(oneUnionMessageFiller
+        client.sendMessage(messagePreBuilder
                 .createFullMessageRequest(
                         Ping.builder()
                                 .setDestination(selfNodeInfo)

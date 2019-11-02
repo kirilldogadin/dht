@@ -5,6 +5,7 @@ import global.unet.structures.NodeInfo;
 
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 /**
  * Обычно ответ на сообщение с сообщение с ресурсом, такие как
@@ -20,13 +21,17 @@ public class ResourceResponse extends BaseMessageWithResource {
         this.nodeInfos = nodeInfos;
     }
 
-    public static ResourceResponse.Builder builder() {
-        return new Builder();
+    public static ResourceResponse.Builder builder(Consumer<BaseBuilder<ResourceResponse>> preBuilder) {
+        return new Builder(preBuilder);
     }
 
     public static class Builder extends BaseMessageWithResource.Builder<ResourceResponse> {
 
         Set<NodeInfo> nodeInfos;
+
+        Builder(Consumer<BaseBuilder<ResourceResponse>> preBuilder) {
+            super(preBuilder);
+        }
 
         public ResourceResponse.Builder setNodeInfos(Set<NodeInfo> nodeInfos) {
             this.nodeInfos = nodeInfos;
@@ -34,7 +39,7 @@ public class ResourceResponse extends BaseMessageWithResource {
         }
 
         @Override
-        ResourceResponse build() {
+        ResourceResponse finalBuild() {
             return new ResourceResponse(
                     source,
                     destination,

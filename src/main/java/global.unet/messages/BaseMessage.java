@@ -4,6 +4,7 @@ import global.unet.id.UnionId;
 import global.unet.structures.NodeInfo;
 
 import java.util.UUID;
+import java.util.function.Consumer;
 
 /**
  * Базовую информацию
@@ -51,11 +52,17 @@ public abstract class BaseMessage<T extends BaseMessage> implements Message<T> {
     }
 
     public static abstract class BaseBuilder<T extends Message> {
+        final Consumer<BaseBuilder<T>> preBuilder;
+
         UUID messageId;
         UnionId networkId;
         NodeInfo source;
         NodeInfo destination;
         int hopes = HOPES_DEFAULT;
+
+        BaseBuilder(Consumer<BaseBuilder<T>> preBuilder) {
+            this.preBuilder = preBuilder;
+        }
 
         //Важный момент BaseBuilder<T> , без него  в методе T build вовзаращается
         // не наследник createFullMessageRequest, а createFullMessageRequest потому что в сеттерах вернеться объект,
@@ -85,7 +92,12 @@ public abstract class BaseMessage<T extends BaseMessage> implements Message<T> {
             return this;
         }
 
-        abstract T build();
+        public T build(){
+            preBuilder.accept(this);
+            return finalBuild();
+        }
+
+        abstract T finalBuild();
 
     }
 

@@ -4,6 +4,7 @@ import global.unet.id.UnionId;
 import global.unet.structures.NodeInfo;
 
 import java.util.UUID;
+import java.util.function.Consumer;
 
 /**
  * Запрос на добавление себя
@@ -22,15 +23,20 @@ public class InitReq extends BaseMessage {
     //по идее определение в подтипе вполне должно устроить
     //то есть не надо городить асбтрактный метод, потому что обращение все равно идет черех конктретный класс
     //это имело бы смысл если бы мы обращались через не знаю какой подтип
-    public static Builder builder() {
-        return new Builder();
+    public static Builder builder(Consumer<BaseBuilder<InitReq>> preBuilder) {
+        return new Builder(preBuilder);
     }
 
     //Todo подумать как вынести в Base
     static class Builder extends BaseBuilder<InitReq> {
 
+
+        Builder(Consumer<BaseBuilder<InitReq>> preBuilder) {
+            super(preBuilder);
+        }
+
         @Override
-        InitReq build() {
+        InitReq finalBuild() {
             return new InitReq(
                     source,
                     destination,

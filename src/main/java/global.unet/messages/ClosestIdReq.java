@@ -4,6 +4,7 @@ import global.unet.id.UnionId;
 import global.unet.structures.NodeInfo;
 
 import java.util.UUID;
+import java.util.function.Consumer;
 
 /**
  * Запрос на поиск ближайшнего к Id ноды
@@ -16,14 +17,18 @@ public class ClosestIdReq extends BaseMessageWithResource {
 
 
     //TODO подумать над названием. Мб это дто?
-    public static BaseMessageWithResource.Builder<ClosestIdReq> builder() {
-        return new Builder();
+    public static BaseMessageWithResource.Builder<ClosestIdReq> builder(Consumer<BaseBuilder<ClosestIdReq>> preBuilder) {
+        return new Builder(preBuilder);
     }
 
     private static class Builder extends BaseMessageWithResource.Builder<ClosestIdReq> {
 
+        Builder(Consumer<BaseBuilder<ClosestIdReq>> preBuilder) {
+            super(preBuilder);
+        }
+
         @Override
-        ClosestIdReq build() {
+        ClosestIdReq finalBuild() {
             return new ClosestIdReq(
                     source,
                     destination,
@@ -32,6 +37,8 @@ public class ClosestIdReq extends BaseMessageWithResource {
                     hopes,
                     resource);
         }
+
+
     }
 
 
