@@ -1,8 +1,8 @@
 package global.unet.server;
 
+import global.unet.id.NodeInfoHolder;
 import global.unet.id.UnionId;
-import global.unet.messages.CommonFieldBuilder;
-import global.unet.messages.Ping;
+import global.unet.messages.BaseMessage;
 import global.unet.node.KademliaRoutingNode;
 import global.unet.structures.NodeInfo;
 import org.junit.Test;
@@ -15,18 +15,23 @@ public class ServerPingTest extends TestUtil {
 
     @Test
     public void test() throws URISyntaxException {
+
+        //nodeBaseInfo
         UnionId nodeId = generateUnid();
         UnionId networkId = generateUnid();
         NodeInfo selfNodeInfo = new NodeInfo(new URI("localhost"), nodeId, 4445);
-        KademliaRoutingNode kademliaRoutingNode = new KademliaRoutingNode(nodeId, networkId, selfNodeInfo);
+        NodeInfoHolder nodeInfoHolder = new NodeInfoHolder(nodeId, networkId, selfNodeInfo);
+
+
+        KademliaRoutingNode kademliaRoutingNode = new KademliaRoutingNode(nodeInfoHolder);
         Runnable serverStarting = kademliaRoutingNode::start;
         BlockingClient client = new BlockingClient();
 
         new Thread(serverStarting).start();
 
-        CommonFieldBuilder commonFieldBuilder = new CommonFieldBuilder(nodeId, selfNodeInfo);
+        BaseMessage.CommonFieldBuilder commonFieldBuilder = new BaseMessage.CommonFieldBuilder(nodeInfoHolder);
         Runnable sendingMessage = () -> {
-
+    /*
             client.sendMessage(commonFieldBuilder
                     .fillMessageAsRequest(
                             //TODO создать фабрику билдера
@@ -34,15 +39,9 @@ public class ServerPingTest extends TestUtil {
                                     .setDestination(selfNodeInfo)
 
                     ));
+
+    */
         };
-
-
-        client.sendMessage(commonFieldBuilder
-                .fillMessageAsRequest(
-                        Ping.builder()
-                                .setDestination(selfNodeInfo)
-
-                ));
 
 
     }

@@ -1,5 +1,6 @@
 package global.unet.messages;
 
+import global.unet.id.NodeInfoHolder;
 import global.unet.id.UnionId;
 import global.unet.structures.NodeInfo;
 
@@ -14,10 +15,6 @@ public class Pong extends BaseMessage<Pong> {
 
     static Pong.Builder builder(Consumer<BaseBuilder<Pong>> preBuilder) {
         return new Builder(preBuilder);
-    }
-
-    public static boolean isReq() {
-        return false;
     }
 
     public static class Builder extends BaseBuilder<Pong> {
@@ -37,32 +34,22 @@ public class Pong extends BaseMessage<Pong> {
 
             );
         }
-
-
-
     }
 
-    public interface BuilderFabric extends MessageBuilderFabric<Pong,Pong.Builder>{}
+    public interface BuilderFabric extends MessageBuilderFabric<Pong, Pong.Builder> {
+    }
 
     public static class BuilderFabricImpl implements BuilderFabric {
 
         final CommonFieldBuilder commonFieldBuilder;
 
-        public BuilderFabricImpl(CommonFieldBuilder commonFieldBuilder) {
-            this.commonFieldBuilder = commonFieldBuilder;
+        public BuilderFabricImpl(NodeInfoHolder nodeInfoHolder) {
+            this.commonFieldBuilder = new CommonFieldBuilder(nodeInfoHolder);
         }
 
         @Override
         public Pong.Builder builder() {
-            return builderByType(Pong.isReq());
-
-        }
-
-        Builder builderByType(boolean isRequest){
-            return isRequest
-                    ? Pong.builder(commonFieldBuilder::fillMessageAsRequest)
-                    : Pong.builder(commonFieldBuilder::fillMessageAsResponse);
-
+            return Pong.builder(commonFieldBuilder::fillMessageAsResponse);
         }
     }
 }

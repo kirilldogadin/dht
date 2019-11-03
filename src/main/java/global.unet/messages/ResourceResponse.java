@@ -25,9 +25,9 @@ public class ResourceResponse extends BaseMessageWithResource {
         return new Builder(preBuilder);
     }
 
-    public static boolean isReq() {
-        return false;
-    }
+//    public static ResourceResponse.Builder builder(NodeInfoHolder nodeInfoHolder) {
+//        return new Builder(new CommonFieldBuilder(nodeInfoHolder));
+//    }
 
     public static class Builder extends BaseMessageWithResource.Builder<ResourceResponse> {
 

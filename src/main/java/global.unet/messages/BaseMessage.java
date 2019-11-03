@@ -1,5 +1,6 @@
 package global.unet.messages;
 
+import global.unet.id.NodeInfoHolder;
 import global.unet.id.UnionId;
 import global.unet.structures.NodeInfo;
 
@@ -62,6 +63,7 @@ public abstract class BaseMessage<T extends BaseMessage> implements Message<T> {
         int hopes = HOPES_DEFAULT;
 
         BaseBuilder(Consumer<BaseBuilder<T>> preBuilder) {
+
             this.preBuilder = preBuilder;
         }
 
@@ -93,7 +95,7 @@ public abstract class BaseMessage<T extends BaseMessage> implements Message<T> {
             return this;
         }
 
-        public T build(){
+        public T build() {
             preBuilder.accept(this);
             return finalBuild();
         }
@@ -104,11 +106,63 @@ public abstract class BaseMessage<T extends BaseMessage> implements Message<T> {
     }
 
 
-    public interface MessageBuilderFabric<T extends Message,U extends BaseBuilder<T>> {
-
+    public interface MessageBuilderFabric<T extends Message, U extends BaseBuilder<T>> {
         U builder();
-
     }
 
 
+    /**
+     * создает сообщения , а также отвечает за генерацию ID сообщения
+     * Для одного юниона работает
+     */
+    public static class CommonFieldBuilder {
+
+        final UnionId networkId;
+        final NodeInfo source;
+
+        public CommonFieldBuilder(NodeInfoHolder nodeInfoHolder) {
+            this.networkId = nodeInfoHolder.networkId;
+            this.source = nodeInfoHolder.source;
+        }
+
+        /**
+         * Заполняет
+         * setSource(source)
+         * networkId
+         * UUID -> randomUUID
+         * Подразумевается, что это сообщение инициатор. В котором будет сгенерировано idсобщения
+         * //TODO id сообщения на самом деле id сессии общения же?
+         *
+         * @param <T>
+         * @param pongBuilder
+         * @return
+         */
+        public <T extends Message> BaseBuilder<T> fillMessageAsRequest(BaseBuilder<T> pongBuilder) {
+            return fillBaseFieldsOfMsg(pongBuilder)
+                    .setMessageId(generateUUID());
+        }
+
+        public <T extends Message> void fillMessageAsResponse(BaseBuilder<T> pongBuilder) {
+            fillBaseFieldsOfMsg(pongBuilder);
+        }
+
+        /**
+         * Заполняет
+         * source
+         * networkId
+         *
+         * @param pongBuilder
+         * @param <T>
+         * @return
+         */
+        private <T extends Message> BaseBuilder<T> fillBaseFieldsOfMsg(BaseBuilder<T> pongBuilder) {
+            return pongBuilder
+                    .setSource(source)
+                    .setNetworkId(networkId);
+        }
+
+        private UUID generateUUID() {
+            return UUID.randomUUID();
+        }
+    }
 }

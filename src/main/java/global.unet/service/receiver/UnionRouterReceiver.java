@@ -1,5 +1,6 @@
 package global.unet.service.receiver;
 
+import global.unet.id.NodeInfoHolder;
 import global.unet.messages.*;
 import global.unet.service.router.UnidRouter;
 
@@ -22,23 +23,29 @@ public class UnionRouterReceiver implements Receiver {
     //TOdo в будущем может иметь или несколько роутеров или несколько таблиц внутри роутера
     protected final UnidRouter unidRouter;
     protected final Consumer<Message> messageSender;
-    protected final CommonFieldBuilder commonFieldBuilder;
+    protected final BaseMessage.CommonFieldBuilder commonFieldBuilder;
+    protected final NodeInfoHolder nodeInfoHolder;
 
     //TODO для всех типов все фарбрики? мб список фабрик
     private final Pong.BuilderFabric pongBuilderFabriceImpl;
     private final ResourceResponse.BuilderFabric resRespBuildFabrice;
 
-    public UnionRouterReceiver(UnidRouter unidRouter, Consumer<Message> messageSender, CommonFieldBuilder commonFieldBuilder) {
+    public UnionRouterReceiver(UnidRouter unidRouter, Consumer<Message> messageSender, NodeInfoHolder nodeInfoHolder) {
+
+        //TODO здесь создавать или он ещё в других местах мб?
         this.unidRouter = unidRouter;
         this.messageSender = messageSender;
-        this.commonFieldBuilder = commonFieldBuilder;
-        pongBuilderFabriceImpl = new Pong.BuilderFabricImpl(commonFieldBuilder);
+        //скрытый класс
+        this.commonFieldBuilder = new BaseMessage.CommonFieldBuilder(nodeInfoHolder);
+        pongBuilderFabriceImpl = new Pong.BuilderFabricImpl(nodeInfoHolder);
         //Todo подумать
         //TODO можно сделать supplier commonFieldBuilder
         //TODO как бы использовать эту лямбду чтобы не описывать внутренний класс
+
         //TODO если тип сообщения Req, то заполнить как Req иначе Resp
         resRespBuildFabrice = () -> ResourceResponse.builder(commonFieldBuilder::fillMessageAsResponse);
 
+        this.nodeInfoHolder = nodeInfoHolder;
     }
 
     public void handle(Message message) {
@@ -80,8 +87,7 @@ public class UnionRouterReceiver implements Receiver {
                 .map(unidRouter::findClosestNodes)
                 .filter(not(Set::isEmpty))
                 .ifPresentOrElse(nodeInfos ->
-                                Optional.of(
-                                        resRespBuildFabrice.builder()
+                                Optional.of(resRespBuildFabrice.builder()
                                         .setNodeInfos(nodeInfos)
                                         .setMessageId(closestIdReq.getMessageId())
                                         .setDestination(closestIdReq.getSource())
