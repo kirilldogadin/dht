@@ -1,5 +1,6 @@
 package global.unet.messages;
 
+import global.unet.id.NodeInfoHolder;
 import global.unet.id.UnionId;
 import global.unet.structures.NodeInfo;
 
@@ -12,7 +13,7 @@ import java.util.function.Consumer;
  * поиск ноды
  * поиск контента
  */
-public class ResourceResponse extends BaseMessageWithResource {
+public class ResourceResponse extends BaseMessageWithResource implements MessageType.Response {
 
     final Set<NodeInfo> nodeInfos;
 
@@ -21,8 +22,13 @@ public class ResourceResponse extends BaseMessageWithResource {
         this.nodeInfos = nodeInfos;
     }
 
+    //Todo удалить
     public static ResourceResponse.Builder builder(Consumer<BaseBuilder<ResourceResponse>> preBuilder) {
         return new Builder(preBuilder);
+    }
+
+    public static ResourceResponse.Builder builder(NodeInfoHolder nodeInfoHolder) {
+        return new Builder(nodeInfoHolder);
     }
 
 //    public static ResourceResponse.Builder builder(NodeInfoHolder nodeInfoHolder) {
@@ -33,8 +39,14 @@ public class ResourceResponse extends BaseMessageWithResource {
 
         Set<NodeInfo> nodeInfos;
 
+
         Builder(Consumer<BaseBuilder<ResourceResponse>> preBuilder) {
             super(preBuilder);
+        }
+
+        public Builder(NodeInfoHolder nodeInfoHolder){
+            super(nodeInfoHolder, ResourceResponse.class);
+
         }
 
         public ResourceResponse.Builder setNodeInfos(Set<NodeInfo> nodeInfos) {

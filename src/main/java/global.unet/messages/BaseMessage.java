@@ -55,6 +55,8 @@ public abstract class BaseMessage<T extends BaseMessage> implements Message<T> {
 
     public static abstract class BaseBuilder<T extends Message> {
         final Consumer<BaseBuilder<T>> preBuilder;
+        //TOdo заменить им preBuilder
+        NodeInfoHolder nodeInfoHolder;
 
         UUID messageId;
         UnionId networkId;
@@ -62,8 +64,26 @@ public abstract class BaseMessage<T extends BaseMessage> implements Message<T> {
         NodeInfo destination;
         int hopes = HOPES_DEFAULT;
 
-        BaseBuilder(Consumer<BaseBuilder<T>> preBuilder) {
+        public BaseBuilder(NodeInfoHolder nodeInfoHolder, Class<? extends MessageType> clazz) {
+            this.nodeInfoHolder = nodeInfoHolder;
+            preBuilder = isRequest(clazz)
+                    ? new CommonFieldBuilder(nodeInfoHolder)::fillMessageAsRequest
+                    : new CommonFieldBuilder(nodeInfoHolder)::fillMessageAsResponse;
+        }
 
+
+
+        public static <T extends MessageType> boolean isRequest(Class<T> clazz){
+            //TODO проверить что является типом MessageType
+            Class<?>[] interfaces0 = clazz.getInterfaces();
+            for (Class interface1 : interfaces0 ){
+                if (interface1.equals(MessageType.Request.class))
+                    return true;
+            }
+            return false;
+        }
+
+        BaseBuilder(Consumer<BaseBuilder<T>> preBuilder) {
             this.preBuilder = preBuilder;
         }
 

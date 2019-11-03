@@ -5,22 +5,17 @@ import global.unet.id.UnionId;
 import global.unet.structures.NodeInfo;
 
 import java.util.UUID;
-import java.util.function.Consumer;
 
-public class Pong extends BaseMessage<Pong> {
+public class Pong extends BaseMessage<Pong> implements MessageType.Response {
 
     private Pong(NodeInfo source, NodeInfo destination, UnionId networkId, UUID messageId, int hopes) {
         super(source, destination, networkId, messageId, hopes);
     }
 
-    static Pong.Builder builder(Consumer<BaseBuilder<Pong>> preBuilder) {
-        return new Builder(preBuilder);
-    }
-
     public static class Builder extends BaseBuilder<Pong> {
 
-        Builder(Consumer<BaseBuilder<Pong>> preBuilder) {
-            super(preBuilder);
+        Builder(NodeInfoHolder nodeInfoHolder){
+            super(nodeInfoHolder, Pong.class);
         }
 
         @Override
@@ -41,15 +36,15 @@ public class Pong extends BaseMessage<Pong> {
 
     public static class BuilderFabricImpl implements BuilderFabric {
 
-        final CommonFieldBuilder commonFieldBuilder;
+        final NodeInfoHolder nodeInfoHolder;
 
         public BuilderFabricImpl(NodeInfoHolder nodeInfoHolder) {
-            this.commonFieldBuilder = new CommonFieldBuilder(nodeInfoHolder);
+            this.nodeInfoHolder = nodeInfoHolder;
         }
 
         @Override
         public Pong.Builder builder() {
-            return Pong.builder(commonFieldBuilder::fillMessageAsResponse);
+            return new Builder(nodeInfoHolder);
         }
     }
 }

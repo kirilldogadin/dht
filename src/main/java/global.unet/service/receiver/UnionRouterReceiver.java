@@ -23,12 +23,13 @@ public class UnionRouterReceiver implements Receiver {
     //TOdo в будущем может иметь или несколько роутеров или несколько таблиц внутри роутера
     protected final UnidRouter unidRouter;
     protected final Consumer<Message> messageSender;
-    protected final BaseMessage.CommonFieldBuilder commonFieldBuilder;
     protected final NodeInfoHolder nodeInfoHolder;
 
     //TODO для всех типов все фарбрики? мб список фабрик
     private final Pong.BuilderFabric pongBuilderFabriceImpl;
     private final ResourceResponse.BuilderFabric resRespBuildFabrice;
+    private final BaseMessage.MessageBuilderFabric<ResourceResponse, ResourceResponse.Builder> resRespBuildFabrice2;
+
 
     public UnionRouterReceiver(UnidRouter unidRouter, Consumer<Message> messageSender, NodeInfoHolder nodeInfoHolder) {
 
@@ -36,14 +37,16 @@ public class UnionRouterReceiver implements Receiver {
         this.unidRouter = unidRouter;
         this.messageSender = messageSender;
         //скрытый класс
-        this.commonFieldBuilder = new BaseMessage.CommonFieldBuilder(nodeInfoHolder);
         pongBuilderFabriceImpl = new Pong.BuilderFabricImpl(nodeInfoHolder);
         //Todo подумать
         //TODO можно сделать supplier commonFieldBuilder
         //TODO как бы использовать эту лямбду чтобы не описывать внутренний класс
 
-        //TODO если тип сообщения Req, то заполнить как Req иначе Resp
-        resRespBuildFabrice = () -> ResourceResponse.builder(commonFieldBuilder::fillMessageAsResponse);
+        resRespBuildFabrice = () -> new ResourceResponse.Builder(nodeInfoHolder);
+        //Todo обобщение нижнего для любого типа
+        resRespBuildFabrice2 = BuilderFabricGenerator.createFabricBuilder(
+                ResourceResponse.Builder.class,
+                nodeInfoHolder);
 
         this.nodeInfoHolder = nodeInfoHolder;
     }
@@ -87,7 +90,7 @@ public class UnionRouterReceiver implements Receiver {
                 .map(unidRouter::findClosestNodes)
                 .filter(not(Set::isEmpty))
                 .ifPresentOrElse(nodeInfos ->
-                                Optional.of(resRespBuildFabrice.builder()
+                                Optional.of(resRespBuildFabrice2.builder()
                                         .setNodeInfos(nodeInfos)
                                         .setMessageId(closestIdReq.getMessageId())
                                         .setDestination(closestIdReq.getSource())

@@ -1,5 +1,6 @@
 package global.unet.messages;
 
+import global.unet.id.NodeInfoHolder;
 import global.unet.id.UnionId;
 import global.unet.structures.NodeInfo;
 
@@ -34,6 +35,10 @@ public abstract class BaseMessageWithResource extends BaseMessage{
 
         Builder(Consumer<BaseBuilder<T>> preBuilder) {
             super(preBuilder);
+        }
+
+        public Builder(NodeInfoHolder nodeInfoHolder, Class<? extends MessageType> clazz) {
+            super(nodeInfoHolder,clazz);
         }
 
 
