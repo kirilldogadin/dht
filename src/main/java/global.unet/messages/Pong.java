@@ -12,14 +12,17 @@ public class Pong extends BaseMessage<Pong> {
         super(source, destination, networkId, messageId, hopes);
     }
 
-    static BaseBuilder<Pong> builder(Consumer<BaseBuilder<Pong>> preBuilder) {
-        return new PongBuilder(preBuilder);
+    static Pong.Builder builder(Consumer<BaseBuilder<Pong>> preBuilder) {
+        return new Builder(preBuilder);
     }
 
+    public static boolean isReq() {
+        return false;
+    }
 
-    static class PongBuilder extends BaseBuilder<Pong> {
+    public static class Builder extends BaseBuilder<Pong> {
 
-        PongBuilder(Consumer<BaseBuilder<Pong>> preBuilder) {
+        Builder(Consumer<BaseBuilder<Pong>> preBuilder) {
             super(preBuilder);
         }
 
@@ -35,5 +38,31 @@ public class Pong extends BaseMessage<Pong> {
             );
         }
 
+
+
+    }
+
+    public interface BuilderFabric extends MessageBuilderFabric<Pong,Pong.Builder>{}
+
+    public static class BuilderFabricImpl implements BuilderFabric {
+
+        final CommonFieldBuilder commonFieldBuilder;
+
+        public BuilderFabricImpl(CommonFieldBuilder commonFieldBuilder) {
+            this.commonFieldBuilder = commonFieldBuilder;
+        }
+
+        @Override
+        public Pong.Builder builder() {
+            return builderByType(Pong.isReq());
+
+        }
+
+        Builder builderByType(boolean isRequest){
+            return isRequest
+                    ? Pong.builder(commonFieldBuilder::fillMessageAsRequest)
+                    : Pong.builder(commonFieldBuilder::fillMessageAsResponse);
+
+        }
     }
 }

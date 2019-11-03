@@ -51,6 +51,7 @@ public abstract class BaseMessage<T extends BaseMessage> implements Message<T> {
         return destination;
     }
 
+
     public static abstract class BaseBuilder<T extends Message> {
         final Consumer<BaseBuilder<T>> preBuilder;
 
@@ -65,7 +66,7 @@ public abstract class BaseMessage<T extends BaseMessage> implements Message<T> {
         }
 
         //Важный момент BaseBuilder<T> , без него  в методе T build вовзаращается
-        // не наследник createFullMessageRequest, а createFullMessageRequest потому что в сеттерах вернеться объект,
+        // не наследник fillMessageAsRequest, а fillMessageAsRequest потому что в сеттерах вернеться объект,
         // который может вернуть только BaseBuilder
         public BaseBuilder<T> setMessageId(UUID messageId) {
             this.messageId = messageId;
@@ -98,6 +99,14 @@ public abstract class BaseMessage<T extends BaseMessage> implements Message<T> {
         }
 
         abstract T finalBuild();
+
+
+    }
+
+
+    public interface MessageBuilderFabric<T extends Message,U extends BaseBuilder<T>> {
+
+        U builder();
 
     }
 

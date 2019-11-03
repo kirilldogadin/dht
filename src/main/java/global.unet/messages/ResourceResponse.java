@@ -25,6 +25,10 @@ public class ResourceResponse extends BaseMessageWithResource {
         return new Builder(preBuilder);
     }
 
+    public static boolean isReq() {
+        return false;
+    }
+
     public static class Builder extends BaseMessageWithResource.Builder<ResourceResponse> {
 
         Set<NodeInfo> nodeInfos;
@@ -49,6 +53,10 @@ public class ResourceResponse extends BaseMessageWithResource {
                     resource,
                     nodeInfos);
         }
+    }
+
+    public interface BuilderFabric extends MessageBuilderFabric<ResourceResponse,ResourceResponse.Builder>{
+
     }
 
 

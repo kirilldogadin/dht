@@ -22,16 +22,23 @@ public class UnionRouterReceiver implements Receiver {
     //TOdo в будущем может иметь или несколько роутеров или несколько таблиц внутри роутера
     protected final UnidRouter unidRouter;
     protected final Consumer<Message> messageSender;
-    protected final MessagePreBuilder messagePreBuilder;
+    protected final CommonFieldBuilder commonFieldBuilder;
 
     //TODO для всех типов все фарбрики? мб список фабрик
-    private final MessageBuilderFabrice<Pong> pongBuilderFabrice;
+    private final Pong.BuilderFabric pongBuilderFabriceImpl;
+    private final ResourceResponse.BuilderFabric resRespBuildFabrice;
 
-    public UnionRouterReceiver(UnidRouter unidRouter, Consumer<Message> messageSender, MessagePreBuilder messagePreBuilder) {
+    public UnionRouterReceiver(UnidRouter unidRouter, Consumer<Message> messageSender, CommonFieldBuilder commonFieldBuilder) {
         this.unidRouter = unidRouter;
         this.messageSender = messageSender;
-        this.messagePreBuilder = messagePreBuilder;
-        pongBuilderFabrice = new PongBuilderFabrice(messagePreBuilder);
+        this.commonFieldBuilder = commonFieldBuilder;
+        pongBuilderFabriceImpl = new Pong.BuilderFabricImpl(commonFieldBuilder);
+        //Todo подумать
+        //TODO можно сделать supplier commonFieldBuilder
+        //TODO как бы использовать эту лямбду чтобы не описывать внутренний класс
+        //TODO если тип сообщения Req, то заполнить как Req иначе Resp
+        resRespBuildFabrice = () -> ResourceResponse.builder(commonFieldBuilder::fillMessageAsResponse);
+
     }
 
     public void handle(Message message) {
@@ -73,7 +80,8 @@ public class UnionRouterReceiver implements Receiver {
                 .map(unidRouter::findClosestNodes)
                 .filter(not(Set::isEmpty))
                 .ifPresentOrElse(nodeInfos ->
-                                Optional.of(ResourceResponse.builder(messagePreBuilder::fillMessageAsResponse)
+                                Optional.of(
+                                        resRespBuildFabrice.builder()
                                         .setNodeInfos(nodeInfos)
                                         .setMessageId(closestIdReq.getMessageId())
                                         .setDestination(closestIdReq.getSource())
@@ -104,7 +112,7 @@ public class UnionRouterReceiver implements Receiver {
     public void handle(Ping ping) {
         System.out.println(ping);
         Optional.of(ping)
-                .map(pingMsg -> pongBuilderFabrice.builder()
+                .map(pingMsg -> pongBuilderFabriceImpl.builder()
                         .setDestination(pingMsg.getSource())
                         .setMessageId(pingMsg.getMessageId())
                         .build())

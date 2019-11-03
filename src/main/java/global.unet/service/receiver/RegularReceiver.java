@@ -1,10 +1,10 @@
 package global.unet.service.receiver;
 
 import global.unet.id.UnionId;
+import global.unet.messages.CommonFieldBuilder;
 import global.unet.messages.ContentHolders;
 import global.unet.messages.FindContentHolders;
 import global.unet.messages.Message;
-import global.unet.messages.MessagePreBuilder;
 import global.unet.service.SearchResult;
 import global.unet.service.router.KadContentRouter;
 import global.unet.service.router.UnidRouter;
@@ -18,8 +18,8 @@ public class RegularReceiver extends UnionRouterReceiver {
 
     private final KadContentRouter contentRouter;
 
-    public RegularReceiver(UnidRouter unidRouter, KadContentRouter contentRouter, Consumer<Message> messageSender, MessagePreBuilder messagePreBuilder) {
-        super(unidRouter, messageSender, messagePreBuilder);
+    public RegularReceiver(UnidRouter unidRouter, KadContentRouter contentRouter, Consumer<Message> messageSender, CommonFieldBuilder commonFieldBuilder) {
+        super(unidRouter, messageSender, commonFieldBuilder);
         this.contentRouter = contentRouter;
 
     }

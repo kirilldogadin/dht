@@ -4,6 +4,6 @@ import java.io.Serializable;
 
 public interface Message<T extends Message> extends Serializable {
 
-    //PongBuilder<? extends T> builder1();
+    //Builder<? extends T> builder1();
 
 }
