@@ -1,7 +1,8 @@
 package global.unet.messages;
 
-import global.unet.id.NodeInfoHolder;
 import global.unet.id.UnionId;
+import global.unet.messages.builders.BaseMessageBuilder;
+import global.unet.messages.builders.MessageBuilderFabric;
 import global.unet.structures.NodeInfo;
 
 import java.util.Set;
@@ -22,40 +23,21 @@ public class ResourceResponse extends BaseMessageWithResource implements Message
         this.nodeInfos = nodeInfos;
     }
 
-    //Todo удалить
-    public static ResourceResponse.Builder builder(Consumer<BaseBuilder<ResourceResponse>> preBuilder) {
-        return new Builder(preBuilder);
-    }
-
-    public static ResourceResponse.Builder builder(NodeInfoHolder nodeInfoHolder) {
-        return new Builder(nodeInfoHolder);
-    }
-
 //    public static ResourceResponse.Builder builder(NodeInfoHolder nodeInfoHolder) {
 //        return new Builder(new CommonFieldBuilder(nodeInfoHolder));
 //    }
 
-    public static class Builder extends BaseMessageWithResource.Builder<ResourceResponse> {
+    public static class MessageBuilder extends BaseMessageWithResource.MessageBuilder<ResourceResponse> {
 
         Set<NodeInfo> nodeInfos;
 
-
-        Builder(Consumer<BaseBuilder<ResourceResponse>> preBuilder) {
-            super(preBuilder);
-        }
-
-        public Builder(NodeInfoHolder nodeInfoHolder){
-            super(nodeInfoHolder, ResourceResponse.class);
-
-        }
-
-        public ResourceResponse.Builder setNodeInfos(Set<NodeInfo> nodeInfos) {
+        public MessageBuilder setNodeInfos(Set<NodeInfo> nodeInfos) {
             this.nodeInfos = nodeInfos;
             return this;
         }
 
         @Override
-        ResourceResponse finalBuild() {
+        public ResourceResponse build() {
             return new ResourceResponse(
                     source,
                     destination,
@@ -66,10 +48,5 @@ public class ResourceResponse extends BaseMessageWithResource implements Message
                     nodeInfos);
         }
     }
-
-    public interface BuilderFabric extends MessageBuilderFabric<ResourceResponse,ResourceResponse.Builder>{
-
-    }
-
 
 }

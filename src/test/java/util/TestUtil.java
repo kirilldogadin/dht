@@ -1,7 +1,7 @@
 package util;
 
 import global.unet.id.KademliaId;
-import global.unet.id.NodeInfoHolder;
+import global.unet.id.UnionNodeInfo;
 import global.unet.id.UnionId;
 import global.unet.structures.NodeInfo;
 import global.unet.structures.XorTreeRoutingTable;
@@ -64,34 +64,34 @@ public class TestUtil {
     }
 
 
-    public static UnionId createKademliaFixedId() {
+    public static UnionId constantId() {
         //0000 0000 0111 1111
         KademliaId selfId = createKademliaIdByTemplate(1, (byte) 127, (byte) 0);
         return selfId;
 
     }
 
-    public static UnionId createKademliaFixedId2() {
+    public static UnionId constantId2() {
         //0000 0000 0010 0000
         return createKademliaIdByTemplate(1, (byte) 32, (byte) 0);
     }
 
     public static XorTreeRoutingTable createRoutingTable() {
-        UnionId kademliaFixedId = createKademliaFixedId();
+        UnionId kademliaFixedId = constantId();
         XorTreeRoutingTable routingTable = new XorTreeRoutingTable(kademliaFixedId);
         return routingTable;
     }
 
     public static NodeInfo nodeInfo1() {
         try {
-            return new NodeInfo(new URI("0.0.0.0"), createKademliaFixedId2(), 228);
+            return new NodeInfo(new URI("0.0.0.0"), constantId2(), 228);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
 
     }
 
-    public static NodeInfoHolder nodeInfoHolder(){
+    public static UnionNodeInfo nodeInfoHolder(){
         UnionId nodeId = generateUnid();
         UnionId networkId = generateUnid();
         NodeInfo selfNodeInfo = null;
@@ -100,6 +100,6 @@ public class TestUtil {
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
-        return new NodeInfoHolder(nodeId, networkId, selfNodeInfo);
+        return new UnionNodeInfo(nodeId, networkId, selfNodeInfo);
     }
 }

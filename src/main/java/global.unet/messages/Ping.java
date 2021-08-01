@@ -1,31 +1,24 @@
 package global.unet.messages;
 
 import global.unet.id.UnionId;
+import global.unet.messages.builders.BaseMessageBuilder;
 import global.unet.structures.NodeInfo;
 
 import java.io.Serializable;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-public class Ping extends BaseMessage implements Serializable {
+public class Ping extends BaseMessage implements Serializable, MessageType.Request {
 
     public Ping(NodeInfo source, NodeInfo destination, UnionId networkId, UUID messageId, int hopes) {
         super(source, destination, networkId, messageId, hopes);
     }
 
-    public static BaseBuilder<Ping> builder(Consumer<BaseBuilder<Ping>> preBuilder) {
-        return new Builder(preBuilder);
-    }
 
-    static class Builder extends BaseBuilder<Ping> {
-
-
-        Builder(Consumer<BaseBuilder<Ping>> preBuilder) {
-            super(preBuilder);
-        }
+    static class MessageBuilder extends BaseMessageBuilder<Ping> {
 
         @Override
-        Ping finalBuild() {
+        public Ping build() {
             return new Ping(
                     source,
                     destination,

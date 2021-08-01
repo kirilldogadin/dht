@@ -1,7 +1,7 @@
 package global.unet.messages;
 
-import global.unet.id.NodeInfoHolder;
 import global.unet.id.UnionId;
+import global.unet.messages.builders.BaseMessageBuilder;
 import global.unet.structures.NodeInfo;
 
 import java.util.UUID;
@@ -13,7 +13,6 @@ import java.util.function.Consumer;
 public abstract class BaseMessageWithResource extends BaseMessage{
 
     private final UnionId resource;
-
 
     public BaseMessageWithResource(NodeInfo source, NodeInfo destination, UnionId networkId, UUID messageId, int hopes, UnionId resource) {
         super(source, destination, networkId, messageId, hopes);
@@ -29,20 +28,11 @@ public abstract class BaseMessageWithResource extends BaseMessage{
         return resource;
     }
 
-    public abstract static class Builder<T extends BaseMessageWithResource> extends BaseMessage.BaseBuilder<T>{
+    public abstract static class MessageBuilder<T extends BaseMessageWithResource> extends BaseMessageBuilder<T> {
 
         UnionId resource;
 
-        Builder(Consumer<BaseBuilder<T>> preBuilder) {
-            super(preBuilder);
-        }
-
-        public Builder(NodeInfoHolder nodeInfoHolder, Class<? extends MessageType> clazz) {
-            super(nodeInfoHolder,clazz);
-        }
-
-
-        public Builder<T> setResource(UnionId resource) {
+        public MessageBuilder<T> setResource(UnionId resource) {
             this.resource = resource;
             return this;
         }

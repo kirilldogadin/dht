@@ -1,6 +1,6 @@
 package global.unet.service.receiver;
 
-import global.unet.id.NodeInfoHolder;
+import global.unet.id.UnionNodeInfo;
 import global.unet.id.UnionId;
 import global.unet.messages.ContentHolders;
 import global.unet.messages.FindContentHolders;
@@ -18,8 +18,8 @@ public class RegularReceiver extends UnionRouterReceiver {
 
     private final KadContentRouter contentRouter;
 
-    public RegularReceiver(UnidRouter unidRouter, Consumer<Message> messageSender, NodeInfoHolder nodeInfoHolder, KadContentRouter contentRouter) {
-        super(unidRouter, messageSender, nodeInfoHolder);
+    public RegularReceiver(UnidRouter unidRouter, Consumer<Message> messageSender, UnionNodeInfo unionNodeInfo, KadContentRouter contentRouter) {
+        super(unidRouter, messageSender, unionNodeInfo);
         this.contentRouter = contentRouter;
     }
 

@@ -1,7 +1,7 @@
 package global.unet.node;
 
 import global.unet.config.NodeConfiguration;
-import global.unet.id.NodeInfoHolder;
+import global.unet.id.UnionNodeInfo;
 import global.unet.messages.BaseMessage;
 import global.unet.server.BlockingServer;
 import global.unet.server.Server;
@@ -21,16 +21,14 @@ public class KademliaRoutingNode implements RoutingNode {
     //todo должен быть сервис, а не сразу стукртукра
     final UnidRouter unidRouter;
     final UnionRouterReceiver unionRouterReceiver;
-    private final BaseMessage.CommonFieldBuilder commonFieldBuilder;
 
     // TODO конструктор с конфигом
 
-    public KademliaRoutingNode(NodeInfoHolder nodeInfoHolder) {
+    public KademliaRoutingNode(UnionNodeInfo unionNodeInfo) {
         this.server = new BlockingServer();
-        this.unidRouter = new KadUnidRouter(nodeInfoHolder.nodeId);
+        this.unidRouter = new KadUnidRouter(unionNodeInfo.nodeId);
         //TODo подумать над конструкцией, мб цикличную зависимость можно разрешить
-        this.commonFieldBuilder = new BaseMessage.CommonFieldBuilder(nodeInfoHolder);
-        this.unionRouterReceiver = new UnionRouterReceiver(unidRouter, server::sendMessage, nodeInfoHolder);
+        this.unionRouterReceiver = new UnionRouterReceiver(unidRouter, server::sendMessage, unionNodeInfo);
 
         //TOdo вот тут сделать через билдер, чтобы пока мы не вызовем build сам сервер не создавался
         server.setMessageHandler(unionRouterReceiver::handle);

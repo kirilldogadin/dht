@@ -1,12 +1,13 @@
 package global.unet.service.receiver;
 
-import global.unet.id.NodeInfoHolder;
+import global.unet.id.UnionNodeInfo;
 import global.unet.messages.*;
 import global.unet.service.router.UnidRouter;
 
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import static java.util.function.Predicate.not;
 
@@ -23,32 +24,21 @@ public class UnionRouterReceiver implements Receiver {
     //TOdo в будущем может иметь или несколько роутеров или несколько таблиц внутри роутера
     protected final UnidRouter unidRouter;
     protected final Consumer<Message> messageSender;
-    protected final NodeInfoHolder nodeInfoHolder;
+    protected final UnionNodeInfo unionNodeInfo;
 
     //TODO для всех типов все фарбрики? мб список фабрик
-    private final Pong.BuilderFabric pongBuilderFabriceImpl;
-    private final ResourceResponse.BuilderFabric resRespBuildFabrice;
-    private final BaseMessage.MessageBuilderFabric<ResourceResponse, ResourceResponse.Builder> resRespBuildFabrice2;
+    private final Supplier<ResourceResponse.MessageBuilder> resourceResponseBuilderSupplier;
+    private final Supplier<Pong.MessageBuilder> pongResponseBuilderSupplier;
 
 
-    public UnionRouterReceiver(UnidRouter unidRouter, Consumer<Message> messageSender, NodeInfoHolder nodeInfoHolder) {
+    public UnionRouterReceiver(UnidRouter unidRouter, Consumer<Message> messageSender, UnionNodeInfo unionNodeInfo) {
 
         //TODO здесь создавать или он ещё в других местах мб?
         this.unidRouter = unidRouter;
         this.messageSender = messageSender;
-        //скрытый класс
-        pongBuilderFabriceImpl = new Pong.BuilderFabricImpl(nodeInfoHolder);
-        //Todo подумать
-        //TODO можно сделать supplier commonFieldBuilder
-        //TODO как бы использовать эту лямбду чтобы не описывать внутренний класс
-
-        resRespBuildFabrice = () -> new ResourceResponse.Builder(nodeInfoHolder);
-        //Todo обобщение нижнего для любого типа
-        resRespBuildFabrice2 = BuilderFabricGenerator.createFabricBuilder(
-                ResourceResponse.Builder.class,
-                nodeInfoHolder);
-
-        this.nodeInfoHolder = nodeInfoHolder;
+        this.unionNodeInfo = unionNodeInfo;
+        this.resourceResponseBuilderSupplier = () -> new ResourceResponse.MessageBuilder();
+        this.pongResponseBuilderSupplier = () -> new Pong.MessageBuilder();
     }
 
     public void handle(Message message) {
@@ -80,6 +70,7 @@ public class UnionRouterReceiver implements Receiver {
      * @param closestIdReq
      * @return
      */
+    //TODO написать тест
     public void handle(ClosestIdReq closestIdReq) {
 
         //Вынести в метод. Скорее всего это делает Нода статистики, или NodeHolder который подписан на ноду статистики
@@ -90,7 +81,7 @@ public class UnionRouterReceiver implements Receiver {
                 .map(unidRouter::findClosestNodes)
                 .filter(not(Set::isEmpty))
                 .ifPresentOrElse(nodeInfos ->
-                                Optional.of(resRespBuildFabrice2.builder()
+                                Optional.of(resourceResponseBuilderSupplier.get()
                                         .setNodeInfos(nodeInfos)
                                         .setMessageId(closestIdReq.getMessageId())
                                         .setDestination(closestIdReq.getSource())
@@ -121,7 +112,7 @@ public class UnionRouterReceiver implements Receiver {
     public void handle(Ping ping) {
         System.out.println(ping);
         Optional.of(ping)
-                .map(pingMsg -> pongBuilderFabriceImpl.builder()
+                .map(pingMsg -> pongResponseBuilderSupplier.get()
                         .setDestination(pingMsg.getSource())
                         .setMessageId(pingMsg.getMessageId())
                         .build())

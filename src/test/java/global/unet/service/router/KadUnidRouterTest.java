@@ -14,8 +14,8 @@ public class KadUnidRouterTest extends TestUtil {
     @Test
     public void UnidRouterTest(){
 
-        UnidRouter kadUnidRouter = new KadUnidRouter(createKademliaFixedId());
-        UnionId kademliaFixedId2 = createKademliaFixedId2();
+        UnidRouter kadUnidRouter = new KadUnidRouter(constantId());
+        UnionId unionId2 = constantId2();
         NodeInfo nodeInfo = nodeInfo1();
         kadUnidRouter.addNode(nodeInfo);
         Set<NodeInfo> closestNodes = kadUnidRouter.findClosestNodes(nodeInfo.getUnionId());

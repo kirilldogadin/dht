@@ -1,23 +1,24 @@
-package global.unet.messages;
+package global.unet.messages.builders;
 
-import global.unet.id.NodeInfoHolder;
+import global.unet.id.UnionNodeInfo;
+import global.unet.messages.Message;
 
 import java.lang.reflect.InvocationTargetException;
 
-public class BuilderFabricGenerator {
+public class ReflectionBuilderFabricGenerator {
 
 
     //Todo возвращает обобщенный
     public static <T extends Message,
-            U extends BaseMessage.BaseBuilder<T>,
-            D extends BaseMessage.MessageBuilderFabric<T, U>>
-    BaseMessage.MessageBuilderFabric<T, U> createFabricBuilder(Class<U> builderClazz, NodeInfoHolder nodeInfoHolder) {
+            U extends BaseMessageBuilder<T>,
+            D extends MessageBuilderFabric<T, U>>
+    MessageBuilderFabric<T, U> fabric(Class<U> builderClazz, UnionNodeInfo unionNodeInfo) {
         return
                 () -> {
                     try {
                         return builderClazz
-                                .getConstructor(NodeInfoHolder.class)
-                                .newInstance(nodeInfoHolder);
+                                .getConstructor(UnionNodeInfo.class)
+                                .newInstance(unionNodeInfo);
                     } catch (InstantiationException
                             | IllegalAccessException
                             | InvocationTargetException

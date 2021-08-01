@@ -1,6 +1,7 @@
 package global.unet.messages;
 
 import global.unet.id.UnionId;
+import global.unet.messages.builders.BaseMessageBuilder;
 import global.unet.structures.NodeInfo;
 
 import java.util.UUID;
@@ -16,26 +17,18 @@ public class ClosestIdReq extends BaseMessageWithResource {
     }
 
 
-    //TODO подумать над названием. Мб это дто?
-    public static BaseMessageWithResource.Builder<ClosestIdReq> builder(Consumer<BaseBuilder<ClosestIdReq>> preBuilder) {
-        return new Builder(preBuilder);
-    }
+    private static class MessageBuilder extends BaseMessageWithResource.MessageBuilder<ClosestIdReq> {
 
-    private static class Builder extends BaseMessageWithResource.Builder<ClosestIdReq> {
-
-        Builder(Consumer<BaseBuilder<ClosestIdReq>> preBuilder) {
-            super(preBuilder);
-        }
 
         @Override
-        ClosestIdReq finalBuild() {
+        public ClosestIdReq build() {
             return new ClosestIdReq(
-                    source,
-                    destination,
-                    networkId,
-                    messageId,
-                    hopes,
-                    resource);
+                    this.source,
+                    this.destination,
+                    this.networkId,
+                    this.messageId,
+                    this.hopes,
+                    this.resource);
         }
 
 
