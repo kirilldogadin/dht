@@ -7,7 +7,6 @@ import global.unet.service.router.UnidRouter;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import static java.util.function.Predicate.not;
 
@@ -27,9 +26,6 @@ public class UnionRouterReceiver implements Receiver {
     protected final UnionNodeInfo unionNodeInfo;
 
     //TODO для всех типов все фарбрики? мб список фабрик
-    private final Supplier<ResourceResponse.MessageBuilder> resourceResponseBuilderSupplier;
-    private final Supplier<Pong.MessageBuilder> pongResponseBuilderSupplier;
-
 
     public UnionRouterReceiver(UnidRouter unidRouter, Consumer<Message> messageSender, UnionNodeInfo unionNodeInfo) {
 
@@ -37,8 +33,6 @@ public class UnionRouterReceiver implements Receiver {
         this.unidRouter = unidRouter;
         this.messageSender = messageSender;
         this.unionNodeInfo = unionNodeInfo;
-        this.resourceResponseBuilderSupplier = () -> new ResourceResponse.MessageBuilder();
-        this.pongResponseBuilderSupplier = () -> new Pong.MessageBuilder();
     }
 
     public void handle(Message message) {
@@ -81,11 +75,13 @@ public class UnionRouterReceiver implements Receiver {
                 .map(unidRouter::findClosestNodes)
                 .filter(not(Set::isEmpty))
                 .ifPresentOrElse(nodeInfos ->
-                                Optional.of(resourceResponseBuilderSupplier.get()
-                                        .setNodeInfos(nodeInfos)
-                                        .setMessageId(closestIdReq.getMessageId())
-                                        .setDestination(closestIdReq.getSource())
-                                        .build())
+                                Optional.of(new ResourceResponse(
+                                        unionNodeInfo.nodeInfo,
+                                        closestIdReq.getSource(),
+                                        closestIdReq.getNetworkId(),
+                                        closestIdReq.getMessageId(),
+                                        closestIdReq.getResource(),
+                                        nodeInfos)                                )
                                         .ifPresent(messageSender),
 
                         () -> { // если ближайшие не найдены
@@ -111,12 +107,16 @@ public class UnionRouterReceiver implements Receiver {
 
     public void handle(Ping ping) {
         System.out.println(ping);
-        Optional.of(ping)
+//        Optional.of(ping)
+                //TODO new Pong
+                /*
                 .map(pingMsg -> pongResponseBuilderSupplier.get()
                         .setDestination(pingMsg.getSource())
                         .setMessageId(pingMsg.getMessageId())
                         .build())
                 .ifPresent(messageSender);
+
+                 */
 
 
     }

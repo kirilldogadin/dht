@@ -8,12 +8,12 @@ import global.unet.structures.NodeInfo;
 public class UnionNodeInfo {
 
     public final UnionId networkId;
-    public final NodeInfo source;
+    public final NodeInfo nodeInfo;
     public final UnionId nodeId;
 
-    public UnionNodeInfo(UnionId nodeId, UnionId networkId, NodeInfo source) {
+    public UnionNodeInfo(UnionId nodeId, UnionId networkId, NodeInfo nodeInfo) {
         this.networkId = networkId;
-        this.source = source;
+        this.nodeInfo = nodeInfo;
         this.nodeId = nodeId;
     }
 

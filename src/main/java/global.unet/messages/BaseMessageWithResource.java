@@ -1,11 +1,9 @@
 package global.unet.messages;
 
 import global.unet.id.UnionId;
-import global.unet.messages.builders.BaseMessageBuilder;
 import global.unet.structures.NodeInfo;
 
 import java.util.UUID;
-import java.util.function.Consumer;
 
 /**
  * Базовые поля с источником
@@ -26,15 +24,5 @@ public abstract class BaseMessageWithResource extends BaseMessage{
 
     public UnionId getResource() {
         return resource;
-    }
-
-    public abstract static class MessageBuilder<T extends BaseMessageWithResource> extends BaseMessageBuilder<T> {
-
-        UnionId resource;
-
-        public MessageBuilder<T> setResource(UnionId resource) {
-            this.resource = resource;
-            return this;
-        }
     }
 }
