@@ -55,7 +55,7 @@ public class UnionRouterReceiver implements Receiver {
         // статистика получает все сообщения для каждой ноды
         // также сделать log
 
-        //TODO
+        //TODO ДЕЛАЙ ЗАЕБИСЬ, А НЕ ЗАЕБИСЬ НЕ ДЕЛАЙ
         handle((Ping) message);
 
     }
@@ -81,9 +81,8 @@ public class UnionRouterReceiver implements Receiver {
                                         closestIdReq.getNetworkId(),
                                         closestIdReq.getMessageId(),
                                         closestIdReq.getResource(),
-                                        nodeInfos)                                )
+                                        nodeInfos))
                                         .ifPresent(messageSender),
-
                         () -> { // если ближайшие не найдены
                             //подумать может ли такое быть и если да, то как обрабатывать
                         });
@@ -107,23 +106,17 @@ public class UnionRouterReceiver implements Receiver {
 
     public void handle(Ping ping) {
         System.out.println(ping);
-//        Optional.of(ping)
-                //TODO new Pong
-                /*
-                .map(pingMsg -> pongResponseBuilderSupplier.get()
-                        .setDestination(pingMsg.getSource())
-                        .setMessageId(pingMsg.getMessageId())
-                        .build())
+        Optional.of(ping)
+                .map(pingMsg -> new Pong(
+                        unionNodeInfo.nodeInfo,
+                        pingMsg.getSource(),
+                        pingMsg.getNetworkId(),
+                        pingMsg.getMessageId()))
                 .ifPresent(messageSender);
-
-                 */
-
-
     }
 
     public void handle(Pong pong) {
-
-
+        System.out.println(pong);
     }
 
 

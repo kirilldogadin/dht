@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 /**
  * Базовую информацию
  */
-public abstract class BaseMessage<T extends BaseMessage> implements Message {
+public abstract class BaseMessage implements Message {
 
     public static final int HOPES_DEFAULT = 50;
 

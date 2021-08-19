@@ -11,6 +11,7 @@ public class BucketFabric {
     public final static int MAX_CAPACITY_DEFAULT = 20;
     private final int maxCapacity;
 
+    //TODO в вызывающем коде не используется все равно передается просто значение
     public BucketFabric(IntSupplier capacitySupplier) {
         int capacity = capacitySupplier.getAsInt();
         validateCapacity(capacity);

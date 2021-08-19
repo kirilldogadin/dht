@@ -10,6 +10,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 //todo из тестов в Ютилс основного пакета
+//TODO Я ЧЕ ОХУЕЛ В СТАТИЧНОМ КОНТЕКСТЕ ПИСАТЬ???? куколд епта
 public class TestUtil {
 
     public static void main(String[] args) {

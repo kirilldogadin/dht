@@ -18,8 +18,7 @@ public abstract class BaseMessageWithResource extends BaseMessage{
     }
 
     public BaseMessageWithResource(NodeInfo source, NodeInfo destination, UnionId networkId, UUID messageId, UnionId resource) {
-        super(source, destination, networkId, messageId);
-        this.resource = resource;
+        this(source, destination, networkId, messageId, HOPES_DEFAULT, resource);
     }
 
     public UnionId getResource() {

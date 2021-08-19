@@ -10,6 +10,7 @@ import java.util.Set;
  * Ничего не знает о резолвинге uname, globalUnid , это ответсвенность не его, это только структура
  */
 //TODO мб конфиг отдельный для этого класса?
+    //TODO разделить инстациаию и ИНИЦИАЛИЗАЦИЮ
 public class XorTreeRoutingTable implements KademliaRoutingTable {
 
     private final UnionId selfNodeUnionId;
@@ -19,6 +20,7 @@ public class XorTreeRoutingTable implements KademliaRoutingTable {
     public XorTreeRoutingTable(UnionId selfNodeUnionId, int capacity) {
         this.selfNodeUnionId = selfNodeUnionId;
         bucketFabric = new BucketFabric(() -> capacity);
+        //TODO разделить инстациаию и ИНИЦИАЛИЗАЦИЮ ?
         this.buckets = initializeBuckets(selfNodeUnionId.getUnidBitCount());
     }
 
@@ -41,7 +43,7 @@ public class XorTreeRoutingTable implements KademliaRoutingTable {
 
     @Override
     public void addNode(NodeInfo nodeInfo) {
-        Optional.ofNullable(nodeInfo)
+        Optional.of(nodeInfo)
                 .map(NodeInfo::getUnionId)
                 .map(this::findBucket)
                 //TODO логика ЕСЛИ найден . Должен быть всегда найден
@@ -96,7 +98,8 @@ public class XorTreeRoutingTable implements KademliaRoutingTable {
 
         for (int byteNumber = 0; byteNumber < unid.length; byteNumber++) { // для каждого байта
             for (int bitNumber = 0; bitNumber < 8; bitNumber++) { // для каждого бита в байте
-                if ((unid[byteNumber] & (1 << (7 - bitNumber))) != 0)
+                //TODO  в приватный метод - че вот вот здесь? че блять за операция че внутри If?
+                if ((unid[byteNumber] & (1 << (7 - bitNumber))) != 0)//TODO вынести в константы метода числа
                     return (byteNumber * 8) + bitNumber;
             }
         }
