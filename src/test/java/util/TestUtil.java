@@ -1,10 +1,10 @@
 package util;
 
-import global.unet.id.KademliaId;
-import global.unet.id.UnionNodeInfo;
-import global.unet.id.UnionId;
-import global.unet.structures.NodeInfo;
-import global.unet.structures.XorTreeRoutingTable;
+import global.unet.domain.id.KademliaId;
+import global.unet.domain.id.UnionNodeInfo;
+import global.unet.domain.id.UnionId;
+import global.unet.domain.structures.NodeInfo;
+import global.unet.domain.structures.XorTreeRoutingTable;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -12,11 +12,6 @@ import java.net.URISyntaxException;
 //todo из тестов в Ютилс основного пакета
 //TODO Я ЧЕ ОХУЕЛ В СТАТИЧНОМ КОНТЕКСТЕ ПИСАТЬ???? куколд епта
 public class TestUtil {
-
-    public static void main(String[] args) {
-        KademliaId generatedID = generateUnid();
-        System.out.println(generatedID.asBytes());
-    }
 
     public static KademliaId generateUnid() {
         return generateUnid(KademliaId.BIT_COUNT);
@@ -28,7 +23,7 @@ public class TestUtil {
      * @param bitsCount
      * @return
      */
-    public static byte[] generateUnidAsByteArray(int bitsCount) {
+    public static byte[] unidAsByteArray(int bitsCount) {
         byte[] id = new byte[bitsCount / Byte.SIZE];
         for (int i = 0; i < id.length; i++) {
             id[i] = (byte) ((int) (Math.random() * 256));
@@ -37,7 +32,7 @@ public class TestUtil {
     }
 
     public static KademliaId generateUnid(int bitsCount) {
-        return new KademliaId(generateUnidAsByteArray(bitsCount));
+        return new KademliaId(unidAsByteArray(bitsCount));
     }
 
     /**
