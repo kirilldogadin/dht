@@ -1,4 +1,4 @@
-package global.unet.domain.server;
+package global.unet.application.server;
 
 import global.unet.domain.messages.Message;
 import global.unet.domain.protocol.ping.PingMessage;
@@ -8,23 +8,19 @@ import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class BlockingServer extends BaseServer {
+//Todo на уровень фреймворка
+public class RawSocketBlockingServer extends BaseServer {
 
     private byte[] buf = new byte[256];
 
     final ServerSocket serverSocket;
 
-    public BlockingServer(int port) {
+    public RawSocketBlockingServer(int port) {
         try {
             serverSocket = new ServerSocket(port);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @Override
-    public void sendMessage(Message message) {
-
     }
 
     @Override

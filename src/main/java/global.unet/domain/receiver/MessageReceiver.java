@@ -1,5 +1,6 @@
-package global.unet.application.receiver;
+package global.unet.domain.receiver;
 
+import global.unet.domain.notitifier.Notifier;
 import global.unet.router.UnidRouter;
 import global.unet.domain.id.UnionNodeInfo;
 import global.unet.domain.messages.*;
@@ -10,7 +11,6 @@ import global.unet.domain.protocol.ping.PingResponse;
 
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Consumer;
 
 import static java.util.function.Predicate.not;
 
@@ -21,21 +21,21 @@ import static java.util.function.Predicate.not;
  * TODO набор операций формируется наобором поддерживающих соообщений
  * поэтому разделение роутеров как классов не акктуально
  */
-public class UnionRouterReceiver implements Receiver {
+public class MessageReceiver implements Receiver {
 
     //TOdo id и прочее
     //TOdo в будущем может иметь или несколько роутеров или несколько таблиц внутри роутера
     protected final UnidRouter unidRouter;
-    protected final Consumer<Message> messageSender;
+    protected final Notifier<Message> messageNotifier;
     protected final UnionNodeInfo unionNodeInfo;
 
     //TODO для всех типов все фарбрики? мб список фабрик
 
-    public UnionRouterReceiver(UnidRouter unidRouter, Consumer<Message> messageSender, UnionNodeInfo unionNodeInfo) {
+    public MessageReceiver(UnidRouter unidRouter, Notifier<Message> messageNotifier, UnionNodeInfo unionNodeInfo) {
 
         //TODO здесь создавать или он ещё в других местах мб?
         this.unidRouter = unidRouter;
-        this.messageSender = messageSender;
+        this.messageNotifier = messageNotifier;
         this.unionNodeInfo = unionNodeInfo;
     }
 
@@ -86,7 +86,7 @@ public class UnionRouterReceiver implements Receiver {
                                         closestIdRequest.getMessageId(),
                                         closestIdRequest.getResource(),
                                         nodeInfos))
-                                        .ifPresent(messageSender),
+                                        .ifPresent(messageNotifier::notify),
                         () -> { // если ближайшие не найдены
                             //подумать может ли такое быть и если да, то как обрабатывать
                         });
@@ -105,12 +105,12 @@ public class UnionRouterReceiver implements Receiver {
     public void handle(UnionBootstrap unionBootstrap) {
         //Взять помимо ближайших из NodeHolder инормацию по всем ближайшим нодам, а также рейтинговым
         //послать сообщение
-        messageSender.accept(null);
+        messageNotifier.notify(null);
     }
 
     public void handle(PingMessage pingMessage) {
         //TODO поменять на Ping operation
-        new PingHandler(pingMessage).handle(pingMessage);
+//        new PingHandler(pingMessage).handle(pingMessage);
         System.out.println(pingMessage);
         Optional.of(pingMessage)
                 .map(pingMsg -> new PingResponse(
@@ -118,7 +118,7 @@ public class UnionRouterReceiver implements Receiver {
                         pingMsg.getSource(),
                         pingMsg.getNetworkId(),
                         pingMsg.getMessageId()))
-                .ifPresent(messageSender);
+                .ifPresent(messageNotifier::notify);
     }
 
     public void handle(PingResponse pingResponse) {

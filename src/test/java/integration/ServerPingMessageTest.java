@@ -1,12 +1,14 @@
 package integration;
 
-import global.unet.application.receiver.UnionRouterReceiver;
+import global.unet.application.client.RawSocketBlockingClient;
+import global.unet.domain.notitifier.Notifier;
+import global.unet.domain.receiver.MessageReceiver;
 import global.unet.router.KadUnidRouter;
 import global.unet.domain.id.UnionNodeInfo;
 import global.unet.domain.id.UnionId;
 import global.unet.domain.messages.*;
 import global.unet.domain.node.KademliaRoutingNode;
-import global.unet.domain.server.*;
+import global.unet.application.server.*;
 import global.unet.domain.structures.NodeInfo;
 import global.unet.domain.protocol.ping.PingMessage;
 import org.junit.Test;
@@ -33,31 +35,31 @@ public class ServerPingMessageTest extends TestUtil
         NodeInfo selfNodeInfo = new NodeInfo(new URI("localhost"), nodeId, SERVER_PORT);
         UnionNodeInfo unionNodeInfo = new UnionNodeInfo(nodeId, networkId, selfNodeInfo);
 
-
         KadUnidRouter unidRouter = new KadUnidRouter(nodeId);
 
         Server server;
-        UnionRouterReceiver unionRouterReceiver;
+        MessageReceiver messageReceiver;
 
-        server = new BlockingServer(SERVER_PORT);
+        server = new RawSocketBlockingServer(SERVER_PORT);
         //TODO server::sendMessage - это для асинхронного , вообще тут должно быть более верхнеуровневая конструкция
         // например какой-то Req2RespHandler
         // что=то типа Req2RespHandler(Server)
 
+        //Todo создает НОВОГО клиента для ответа
+        Notifier<Message> receiverNotifier = message -> new RawSocketBlockingClient("localhost", 4445).send(message);
 
         //TODO тут должен быть не server::send message а вообще что-то другое
-        unionRouterReceiver = new UnionRouterReceiver(unidRouter, server::sendMessage, unionNodeInfo);
-        server.setMessageHandler(unionRouterReceiver::handle);
+        messageReceiver = new MessageReceiver(unidRouter, receiverNotifier, unionNodeInfo);
+        server.setMessageHandler(messageReceiver::handle);
 
-        KademliaRoutingNode kademliaRoutingNode = new KademliaRoutingNode(server, unidRouter, unionRouterReceiver);
-        Runnable serverStarting = kademliaRoutingNode::start;
-        BlockingClient client = new BlockingClient();
+        KademliaRoutingNode kademliaRoutingNode = new KademliaRoutingNode(unidRouter, messageReceiver);
+        Runnable serverStarting = server::start;
 
         new Thread(serverStarting).start();
 
 //        serverStarting.run();  vbgf
         Runnable sendingMessage = () -> {
-            client.sendMessage(
+            receiverNotifier.notify(
                     new PingMessage(selfNodeInfo,
                             selfNodeInfo,
                             networkId,
@@ -68,7 +70,7 @@ public class ServerPingMessageTest extends TestUtil
         sendingMessage.run();
         //Todo не очень хорошее решение управлять потоками вручную
 
-        sleep(700);
+        sleep(1000);
 //        new Thread(sendingMessage).start();
 
     }

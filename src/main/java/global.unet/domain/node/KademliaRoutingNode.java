@@ -1,8 +1,7 @@
 package global.unet.domain.node;
 
 import global.unet.domain.config.NodeConfiguration;
-import global.unet.domain.server.Server;
-import global.unet.application.receiver.UnionRouterReceiver;
+import global.unet.domain.receiver.MessageReceiver;
 import global.unet.router.KadUnidRouter;
 import global.unet.router.UnidRouter;
 
@@ -14,30 +13,23 @@ import global.unet.router.UnidRouter;
  */
 public class KademliaRoutingNode implements RoutingNode {
 
-    final Server server;
     final UnidRouter unidRouter;
-    final UnionRouterReceiver unionRouterReceiver;
+    final MessageReceiver messageReceiver;
 
-    // TODO конструктор с конфигом
-    public KademliaRoutingNode(Server server, KadUnidRouter unidRouter, UnionRouterReceiver unionRouterReceiver) {
-        this.server = server;
+    // TODO избавиться от сервера в этой зависимости, здесть нижнеуровнвый зависит от верхнеуровнего
+    public KademliaRoutingNode(KadUnidRouter unidRouter, MessageReceiver messageReceiver) {
         this.unidRouter = unidRouter;
-        this.unionRouterReceiver = unionRouterReceiver;
-    }
-
-    public KademliaRoutingNode(NodeConfiguration nodeConfiguration)
-    {
-        this(null, null, null);
+        this.messageReceiver = messageReceiver;
     }
 
     @Override
     public void start() {
-
-        server.start();
+        //TODO ничего не должен знать о сервере и о том КАК он работает, его должен стартатовать кто-то во внешнем слое
     }
 
     @Override
     public void shutDown() {
+        //TODO ничего не должен знать о сервере и о том КАК он работает, его должен стартатовать кто-то во внешнем слое
         //пулы задач мягкое завершение потом остальное
     }
 

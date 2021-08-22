@@ -1,4 +1,4 @@
-package global.unet.application.receiver;
+package global.unet.domain.receiver;
 
 /**
  * Логика работы с принимаемыми сообщениями

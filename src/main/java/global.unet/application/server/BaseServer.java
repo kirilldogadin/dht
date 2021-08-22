@@ -1,4 +1,4 @@
-package global.unet.domain.server;
+package global.unet.application.server;
 
 import global.unet.domain.exception.UnionServerException;
 import global.unet.domain.messages.Message;
