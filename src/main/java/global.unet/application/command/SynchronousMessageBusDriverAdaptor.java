@@ -12,7 +12,6 @@ public class SynchronousMessageBusDriverAdaptor implements MessageBusDriver {
      private final HashMap handlerByMessage;
 
     public SynchronousMessageBusDriverAdaptor(HashMap<Class<? extends Message>, MessageHandler<? extends Message>> message2MessageHandler) {
-
         handlerByMessage = message2MessageHandler;
     }
 

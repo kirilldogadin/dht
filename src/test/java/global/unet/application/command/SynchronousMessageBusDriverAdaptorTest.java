@@ -15,9 +15,14 @@ public class SynchronousMessageBusDriverAdaptorTest {
         HashMap<Class<? extends Message>, MessageHandler<? extends Message>> message2MessageHandler = new HashMap<>();
         //TODO тест на PingMessage
         message2MessageHandler.put(PingMessage.class,
-                message -> System.out.println(SynchronousMessageBusDriverAdaptor.class.getName()+
-                        "work, testing message:"
-                        + message));
+                new MessageHandler<Message>() {
+                    @Override
+                    public void handle(Message message) {
+                        System.out.println(SynchronousMessageBusDriverAdaptor.class.getName() +
+                                "work, testing message:"
+                                + message);
+                    }
+                });
         SynchronousMessageBusDriverAdaptor synchronousMessageBusDriverAdaptor
                 = new SynchronousMessageBusDriverAdaptor(message2MessageHandler);
         PingMessage testingMessage = new PingMessage(null, null, null, null, 0);
