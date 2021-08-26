@@ -2,8 +2,8 @@ package global.unet.domain.node;
 
 import global.unet.domain.config.NodeConfiguration;
 import global.unet.domain.receiver.MessageReceiver;
-import global.unet.router.KadUnidRouter;
-import global.unet.router.UnidRouter;
+import global.unet.domain.router.KadUnidRouter;
+import global.unet.domain.router.UnidRouter;
 
 /**
  * Нода сервис которая выполняет только роутинг. Добавление нод

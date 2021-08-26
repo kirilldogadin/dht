@@ -2,8 +2,6 @@ package global.unet.domain.router;
 
 import global.unet.domain.id.UnionId;
 import global.unet.domain.structures.NodeInfo;
-import global.unet.router.KadUnidRouter;
-import global.unet.router.UnidRouter;
 import org.junit.Test;
 import util.TestUtil;
 

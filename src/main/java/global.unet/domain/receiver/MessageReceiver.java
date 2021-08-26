@@ -1,13 +1,12 @@
 package global.unet.domain.receiver;
 
 import global.unet.domain.notitifier.Notifier;
-import global.unet.router.UnidRouter;
-import global.unet.domain.id.UnionNodeInfo;
+import global.unet.domain.router.UnidRouter;
+import global.unet.domain.id.UnionInfo;
 import global.unet.domain.messages.*;
 import global.unet.domain.protocol.find.ClosestIdRequest;
 import global.unet.domain.protocol.ping.PingMessage;
-import global.unet.domain.protocol.ping.PingHandler;
-import global.unet.domain.protocol.ping.PingResponse;
+import global.unet.domain.protocol.ping.PingMessageHandler;
 
 import java.util.Optional;
 import java.util.Set;
@@ -23,20 +22,23 @@ import static java.util.function.Predicate.not;
  */
 public class MessageReceiver implements Receiver {
 
-    //TOdo id и прочее
-    //TOdo в будущем может иметь или несколько роутеров или несколько таблиц внутри роутера
+    //TODO может быть в Handlers
     protected final UnidRouter unidRouter;
     protected final Notifier<Message> messageNotifier;
-    protected final UnionNodeInfo unionNodeInfo;
+    protected final UnionInfo unionInfo;
+
+    protected final PingMessageHandler pingMessageHandler;
 
     //TODO для всех типов все фарбрики? мб список фабрик
 
-    public MessageReceiver(UnidRouter unidRouter, Notifier<Message> messageNotifier, UnionNodeInfo unionNodeInfo) {
+    public MessageReceiver(UnidRouter unidRouter, Notifier<Message> messageNotifier, UnionInfo unionInfo) {
 
         //TODO здесь создавать или он ещё в других местах мб?
         this.unidRouter = unidRouter;
         this.messageNotifier = messageNotifier;
-        this.unionNodeInfo = unionNodeInfo;
+        this.unionInfo = unionInfo;
+
+        pingMessageHandler = new PingMessageHandler(messageNotifier);
     }
 
     public void handle(Message message) {
@@ -80,7 +82,7 @@ public class MessageReceiver implements Receiver {
                 .filter(not(Set::isEmpty))
                 .ifPresentOrElse(nodeInfos ->
                                 Optional.of(new ResourceResponse(
-                                        unionNodeInfo.nodeInfo,
+                                        unionInfo.nodeInfo,
                                         closestIdRequest.getSource(),
                                         closestIdRequest.getNetworkId(),
                                         closestIdRequest.getMessageId(),
@@ -95,7 +97,6 @@ public class MessageReceiver implements Receiver {
 
     public void handle(InitReq initReq) {
         unidRouter.addNode(initReq.getSource());
-
     }
 
     public void handle(FindContentHolders initReq) {
@@ -109,20 +110,8 @@ public class MessageReceiver implements Receiver {
     }
 
     public void handle(PingMessage pingMessage) {
-        //TODO поменять на Ping operation
-//        new PingHandler(pingMessage).handle(pingMessage);
         System.out.println(pingMessage);
-        Optional.of(pingMessage)
-                .map(pingMsg -> new PingResponse(
-                        unionNodeInfo.nodeInfo,
-                        pingMsg.getSource(),
-                        pingMsg.getNetworkId(),
-                        pingMsg.getMessageId()))
-                .ifPresent(messageNotifier::notify);
-    }
-
-    public void handle(PingResponse pingResponse) {
-        System.out.println(pingResponse);
+        pingMessageHandler.handle(pingMessage);
     }
 
 

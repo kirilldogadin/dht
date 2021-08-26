@@ -2,9 +2,9 @@ package global.unet.domain.receiver;
 
 import global.unet.application.SearchResult;
 import global.unet.domain.notitifier.Notifier;
-import global.unet.router.KadContentRouter;
-import global.unet.router.UnidRouter;
-import global.unet.domain.id.UnionNodeInfo;
+import global.unet.domain.router.KadContentRouter;
+import global.unet.domain.router.UnidRouter;
+import global.unet.domain.id.UnionInfo;
 import global.unet.domain.id.UnionId;
 import global.unet.domain.messages.ContentHolders;
 import global.unet.domain.messages.FindContentHolders;
@@ -17,8 +17,8 @@ public class Regular extends MessageReceiver {
 
     private final KadContentRouter contentRouter;
 
-    public Regular(UnidRouter unidRouter, Notifier<Message> messageSender, UnionNodeInfo unionNodeInfo, KadContentRouter contentRouter) {
-        super(unidRouter, messageSender, unionNodeInfo);
+    public Regular(UnidRouter unidRouter, Notifier<Message> messageSender, UnionInfo unionInfo, KadContentRouter contentRouter) {
+        super(unidRouter, messageSender, unionInfo);
         this.contentRouter = contentRouter;
     }
 

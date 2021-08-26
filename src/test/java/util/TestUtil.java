@@ -1,7 +1,7 @@
 package util;
 
 import global.unet.domain.id.KademliaId;
-import global.unet.domain.id.UnionNodeInfo;
+import global.unet.domain.id.UnionInfo;
 import global.unet.domain.id.UnionId;
 import global.unet.domain.structures.NodeInfo;
 import global.unet.domain.structures.XorTreeRoutingTable;
@@ -87,7 +87,7 @@ public class TestUtil {
 
     }
 
-    public static UnionNodeInfo nodeInfoHolder(){
+    public static UnionInfo nodeInfoHolder(){
         UnionId nodeId = generateUnid();
         UnionId networkId = generateUnid();
         NodeInfo selfNodeInfo = null;
@@ -96,6 +96,6 @@ public class TestUtil {
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
-        return new UnionNodeInfo(nodeId, networkId, selfNodeInfo);
+        return new UnionInfo(nodeId, networkId, selfNodeInfo);
     }
 }

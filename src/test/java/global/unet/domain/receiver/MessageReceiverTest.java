@@ -1,25 +1,26 @@
-package integration;
+package global.unet.domain.receiver;
 
 import global.unet.application.client.RawSocketBlockingClient;
-import global.unet.domain.notitifier.Notifier;
-import global.unet.domain.receiver.MessageReceiver;
-import global.unet.domain.router.KadUnidRouter;
-import global.unet.domain.id.UnionInfo;
+import global.unet.application.server.RawSocketBlockingServer;
+import global.unet.application.server.Server;
 import global.unet.domain.id.UnionId;
-import global.unet.domain.messages.*;
-import global.unet.application.server.*;
-import global.unet.domain.structures.NodeInfo;
+import global.unet.domain.id.UnionInfo;
+import global.unet.domain.messages.BaseMessage;
+import global.unet.domain.messages.Message;
+import global.unet.domain.notitifier.Notifier;
 import global.unet.domain.protocol.ping.PingMessage;
+import global.unet.domain.structures.NodeInfo;
+import global.unet.domain.router.KadUnidRouter;
 import org.junit.Test;
 import util.TestUtil;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.UUID;
 
 import static java.lang.Thread.sleep;
 
-public class ServerPingMessageTest extends TestUtil
+public class MessageReceiverTest extends TestUtil
 {
 
     private final int SERVER_PORT = 4445;

@@ -15,6 +15,7 @@ import java.util.Objects;
 public class NodeInfo implements Serializable {
 
     private final URI uri;
+    //Todo наверное nodeId , а не unionId?
     final UnionId unionId;
     final int port;
     //Todo должно ли быть здесь с точки зрения организация инкапусляции( находится в другом пакейдже)

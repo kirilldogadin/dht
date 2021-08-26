@@ -1,4 +1,4 @@
-package global.unet.router;
+package global.unet.domain.router;
 
 import global.unet.domain.id.UnionId;
 import global.unet.domain.structures.NodeInfo;
