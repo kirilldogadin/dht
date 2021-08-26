@@ -1,6 +1,6 @@
 package global.unet.domain.notitifier;
 
-public interface Notifier<T> {
+public interface NotifierDrivenPort<T> {
 
     void notify(T message);
 }

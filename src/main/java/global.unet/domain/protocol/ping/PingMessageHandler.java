@@ -1,7 +1,7 @@
 package global.unet.domain.protocol.ping;
 
 import global.unet.domain.messages.Message;
-import global.unet.domain.notitifier.Notifier;
+import global.unet.domain.notitifier.NotifierDrivenPort;
 import global.unet.domain.protocol.MessageHandler;
 
 import java.util.Optional;
@@ -12,10 +12,10 @@ import java.util.Optional;
 //TODO к сожалению пока лучше нет идеи имени
 public class PingMessageHandler implements MessageHandler<PingMessage> {
 
-    final Notifier<Message> notifier;
+    final NotifierDrivenPort<Message> notifierDrivenPort;
 
-    public PingMessageHandler(Notifier<Message> notifier) {
-        this.notifier = notifier;
+    public PingMessageHandler(NotifierDrivenPort<Message> notifierDrivenPort) {
+        this.notifierDrivenPort = notifierDrivenPort;
     }
 
     @Override
@@ -26,7 +26,7 @@ public class PingMessageHandler implements MessageHandler<PingMessage> {
                         pingMsg.getSource(),
                         pingMsg.getNetworkId(),
                         pingMsg.getMessageId()))
-                .ifPresent(notifier::notify);
+                .ifPresent(notifierDrivenPort::notify);
     }
 
 }

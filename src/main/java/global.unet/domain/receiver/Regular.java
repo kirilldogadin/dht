@@ -1,7 +1,7 @@
 package global.unet.domain.receiver;
 
 import global.unet.application.SearchResult;
-import global.unet.domain.notitifier.Notifier;
+import global.unet.domain.notitifier.NotifierDrivenPort;
 import global.unet.domain.router.KadContentRouter;
 import global.unet.domain.router.UnidRouter;
 import global.unet.domain.id.UnionInfo;
@@ -17,7 +17,7 @@ public class Regular extends MessageReceiver {
 
     private final KadContentRouter contentRouter;
 
-    public Regular(UnidRouter unidRouter, Notifier<Message> messageSender, UnionInfo unionInfo, KadContentRouter contentRouter) {
+    public Regular(UnidRouter unidRouter, NotifierDrivenPort<Message> messageSender, UnionInfo unionInfo, KadContentRouter contentRouter) {
         super(unidRouter, messageSender, unionInfo);
         this.contentRouter = contentRouter;
     }
@@ -28,7 +28,7 @@ public class Regular extends MessageReceiver {
         //тут пихаем результат в сообщение
         ContentHolders contentHolders = new ContentHolders();
 
-        messageNotifier.notify(null);
+        messageNotifierDrivenPort.notify(null);
     }
 
     public void handle(ContentHolders contentHolders){

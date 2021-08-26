@@ -1,6 +1,6 @@
 package global.unet.domain.receiver;
 
-import global.unet.domain.notitifier.Notifier;
+import global.unet.domain.notitifier.NotifierDrivenPort;
 import global.unet.domain.router.UnidRouter;
 import global.unet.domain.id.UnionInfo;
 import global.unet.domain.messages.*;
@@ -24,21 +24,21 @@ public class MessageReceiver implements Receiver {
 
     //TODO может быть в Handlers
     protected final UnidRouter unidRouter;
-    protected final Notifier<Message> messageNotifier;
+    protected final NotifierDrivenPort<Message> messageNotifierDrivenPort;
     protected final UnionInfo unionInfo;
 
     protected final PingMessageHandler pingMessageHandler;
 
     //TODO для всех типов все фарбрики? мб список фабрик
 
-    public MessageReceiver(UnidRouter unidRouter, Notifier<Message> messageNotifier, UnionInfo unionInfo) {
+    public MessageReceiver(UnidRouter unidRouter, NotifierDrivenPort<Message> messageNotifierDrivenPort, UnionInfo unionInfo) {
 
         //TODO здесь создавать или он ещё в других местах мб?
         this.unidRouter = unidRouter;
-        this.messageNotifier = messageNotifier;
+        this.messageNotifierDrivenPort = messageNotifierDrivenPort;
         this.unionInfo = unionInfo;
 
-        pingMessageHandler = new PingMessageHandler(messageNotifier);
+        pingMessageHandler = new PingMessageHandler(messageNotifierDrivenPort);
     }
 
     public void handle(Message message) {
@@ -88,7 +88,7 @@ public class MessageReceiver implements Receiver {
                                         closestIdRequest.getMessageId(),
                                         closestIdRequest.getResource(),
                                         nodeInfos))
-                                        .ifPresent(messageNotifier::notify),
+                                        .ifPresent(messageNotifierDrivenPort::notify),
                         () -> { // если ближайшие не найдены
                             //подумать может ли такое быть и если да, то как обрабатывать
                         });
@@ -106,7 +106,7 @@ public class MessageReceiver implements Receiver {
     public void handle(UnionBootstrap unionBootstrap) {
         //Взять помимо ближайших из NodeHolder инормацию по всем ближайшим нодам, а также рейтинговым
         //послать сообщение
-        messageNotifier.notify(null);
+        messageNotifierDrivenPort.notify(null);
     }
 
     public void handle(PingMessage pingMessage) {

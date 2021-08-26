@@ -7,7 +7,7 @@ import global.unet.domain.id.UnionId;
 import global.unet.domain.id.UnionInfo;
 import global.unet.domain.messages.BaseMessage;
 import global.unet.domain.messages.Message;
-import global.unet.domain.notitifier.Notifier;
+import global.unet.domain.notitifier.NotifierDrivenPort;
 import global.unet.domain.protocol.ping.PingMessage;
 import global.unet.domain.structures.NodeInfo;
 import global.unet.domain.router.KadUnidRouter;
@@ -41,10 +41,10 @@ public class MessageReceiverTest extends TestUtil
         MessageReceiver messageReceiver;
 
         //создает НОВОГО клиента для ответа
-        Notifier<Message> receiverNotifier = message -> new RawSocketBlockingClient("localhost", 4445).send(message);
+        NotifierDrivenPort<Message> receiverNotifierDrivenPort = message -> new RawSocketBlockingClient("localhost", 4445).send(message);
 
         //TODO тут должен быть не server::send message а вообще что-то другое
-        messageReceiver = new MessageReceiver(unidRouter, receiverNotifier, unionInfo);
+        messageReceiver = new MessageReceiver(unidRouter, receiverNotifierDrivenPort, unionInfo);
         server = new RawSocketBlockingServer(SERVER_PORT);
         server.setMessageHandler(messageReceiver::handle);
 
@@ -54,7 +54,7 @@ public class MessageReceiverTest extends TestUtil
 
 //        serverStarting.run();  vbgf
         Runnable sendingMessage = () -> {
-            receiverNotifier.notify(
+            receiverNotifierDrivenPort.notify(
                     new PingMessage(selfNodeInfo,
                             selfNodeInfo,
                             networkId,
