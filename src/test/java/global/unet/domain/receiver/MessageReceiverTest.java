@@ -8,11 +8,11 @@ import global.unet.domain.id.UnionInfo;
 import global.unet.domain.messages.BaseMessage;
 import global.unet.domain.messages.Message;
 import global.unet.domain.notitifier.NotifierDrivenPort;
-import global.unet.domain.protocol.ping.PingMessage;
+import global.unet.domain.protocol.ping.PingMessageRequest;
 import global.unet.domain.structures.NodeInfo;
 import global.unet.domain.router.KadUnidRouter;
 import org.junit.Test;
-import util.TestUtil;
+import util.UnionGenerator;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -20,7 +20,7 @@ import java.util.UUID;
 
 import static java.lang.Thread.sleep;
 
-public class MessageReceiverTest extends TestUtil
+public class MessageReceiverTest extends UnionGenerator
 {
 
     private final int SERVER_PORT = 4445;
@@ -55,7 +55,7 @@ public class MessageReceiverTest extends TestUtil
 //        serverStarting.run();  vbgf
         Runnable sendingMessage = () -> {
             receiverNotifierDrivenPort.notify(
-                    new PingMessage(selfNodeInfo,
+                    new PingMessageRequest(selfNodeInfo,
                             selfNodeInfo,
                             networkId,
                             UUID.randomUUID(),

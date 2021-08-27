@@ -2,7 +2,7 @@ package global.unet.application.command;
 
 import global.unet.domain.messages.Message;
 import global.unet.domain.protocol.MessageHandler;
-import global.unet.domain.protocol.ping.PingMessage;
+import global.unet.domain.protocol.ping.PingMessageRequest;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -14,7 +14,7 @@ public class SynchronousMessageBusDriverAdaptorTest {
 
         HashMap<Class<? extends Message>, MessageHandler<? extends Message>> message2MessageHandler = new HashMap<>();
         //TODO тест на PingMessage
-        message2MessageHandler.put(PingMessage.class,
+        message2MessageHandler.put(PingMessageRequest.class,
                 new MessageHandler<Message>() {
                     @Override
                     public void handle(Message message) {
@@ -25,7 +25,7 @@ public class SynchronousMessageBusDriverAdaptorTest {
                 });
         SynchronousMessageBusDriverAdaptor synchronousMessageBusDriverAdaptor
                 = new SynchronousMessageBusDriverAdaptor(message2MessageHandler);
-        PingMessage testingMessage = new PingMessage(null, null, null, null, 0);
+        PingMessageRequest testingMessage = new PingMessageRequest(null, null, null, null, 0);
         synchronousMessageBusDriverAdaptor.handle(testingMessage);
     }
 }

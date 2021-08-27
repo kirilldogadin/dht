@@ -7,7 +7,7 @@ import java.net.*;
 import java.util.*;
 
 import static org.junit.Assert.*;
-import static util.TestUtil.*;
+import static util.UnionGenerator.*;
 
 public class XorTreeRoutingTableTest {
 

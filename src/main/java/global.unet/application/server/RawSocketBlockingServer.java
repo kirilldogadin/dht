@@ -1,7 +1,7 @@
 package global.unet.application.server;
 
 import global.unet.domain.messages.Message;
-import global.unet.domain.protocol.ping.PingMessage;
+import global.unet.domain.protocol.ping.PingMessageRequest;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -48,12 +48,12 @@ public class RawSocketBlockingServer extends BaseServer {
             System.out.println(object);
             //Todo здесь попытка сделать асинхронный ответ, но это блокирующий сервер, так что овтет надо сразу давать
             checkMessageHandler();
-            messageHandler.accept((PingMessage) object);
+            messageHandler.accept((PingMessageRequest) object);
         }
     }
 
     public Message deserialize(Object msg) {
         //todo проверяем на типы, тут зашит, но вообще список динамический List<Handler>
-        return (PingMessage) msg;
+        return (PingMessageRequest) msg;
     }
 }

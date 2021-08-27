@@ -3,6 +3,7 @@ package global.unet.domain.messages;
 import global.unet.domain.id.UnionId;
 import global.unet.domain.structures.NodeInfo;
 
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -27,7 +28,7 @@ public abstract class BaseMessage implements Message {
         this.hopes = hopes;
     }
 
-    BaseMessage(NodeInfo source, NodeInfo destination, UnionId networkId, UUID messageId) {
+    protected BaseMessage(NodeInfo source, NodeInfo destination, UnionId networkId, UUID messageId) {
         this(source, destination, networkId, messageId, HOPES_DEFAULT);
     }
 
@@ -51,7 +52,18 @@ public abstract class BaseMessage implements Message {
         return destination;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof BaseMessage)) return false;
+        BaseMessage that = (BaseMessage) o;
+        return hopes == that.hopes && messageId.equals(that.messageId) && networkId.equals(that.networkId) && source.equals(that.source) && destination.equals(that.destination);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(messageId, networkId, source, destination, hopes);
+    }
 }
 
 

@@ -5,7 +5,7 @@ import global.unet.domain.messages.Message;
 /**
  * Mapping Event2EventHandler
  * Command - сценарий использования,
- * CommandBus оркестрирует процесс выполнения Command
+ * CommandBus оркестрирует процесс Обработки Message
  */
 public interface MessageBusDriver {
 

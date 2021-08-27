@@ -5,7 +5,7 @@ import global.unet.domain.router.UnidRouter;
 import global.unet.domain.id.UnionInfo;
 import global.unet.domain.messages.*;
 import global.unet.domain.protocol.find.ClosestIdRequest;
-import global.unet.domain.protocol.ping.PingMessage;
+import global.unet.domain.protocol.ping.PingMessageRequest;
 import global.unet.domain.protocol.ping.PingMessageHandler;
 
 import java.util.Optional;
@@ -62,7 +62,7 @@ public class MessageReceiver implements Receiver {
         // также сделать log
 
         //TODO ДЕЛАЙ ЗАЕБИСЬ, А НЕ ЗАЕБИСЬ НЕ ДЕЛАЙ
-        handle((PingMessage) message);
+        handle((PingMessageRequest) message);
 
     }
 
@@ -109,9 +109,9 @@ public class MessageReceiver implements Receiver {
         messageNotifierDrivenPort.notify(null);
     }
 
-    public void handle(PingMessage pingMessage) {
-        System.out.println(pingMessage);
-        pingMessageHandler.handle(pingMessage);
+    public void handle(PingMessageRequest pingMessageRequest) {
+        System.out.println(pingMessageRequest);
+        pingMessageHandler.handle(pingMessageRequest);
     }
 
 

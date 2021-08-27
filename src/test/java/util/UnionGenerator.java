@@ -11,7 +11,7 @@ import java.net.URISyntaxException;
 
 //todo из тестов в Ютилс основного пакета
 //TODO Я ЧЕ ОХУЕЛ В СТАТИЧНОМ КОНТЕКСТЕ ПИСАТЬ???? куколд епта
-public class TestUtil {
+public class UnionGenerator {
 
     public static KademliaId generateUnid() {
         return generateUnid(KademliaId.BIT_COUNT);
@@ -59,16 +59,24 @@ public class TestUtil {
         return new KademliaId(bytes);
     }
 
-
+    /**
+     * @return 0000 0000 0111 1111
+     */
     public static UnionId constantId() {
-        //0000 0000 0111 1111
         KademliaId selfId = createKademliaIdByTemplate(1, (byte) 127, (byte) 0);
         return selfId;
-
     }
 
+    /**
+     * @return 0000 0000 0010 0000
+     */
     public static UnionId constantId2() {
-        //0000 0000 0010 0000
+        return createKademliaIdByTemplate(1, (byte) 32, (byte) 0);
+    }
+    /**
+     * @return 0000 0000 0010 0000
+     */
+    public static UnionId constantNetworkId() {
         return createKademliaIdByTemplate(1, (byte) 32, (byte) 0);
     }
 

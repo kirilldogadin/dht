@@ -10,7 +10,7 @@ import java.util.Optional;
  *
  */
 //TODO к сожалению пока лучше нет идеи имени
-public class PingMessageHandler implements MessageHandler<PingMessage> {
+public class PingMessageHandler implements MessageHandler<PingMessageRequest> {
 
     final NotifierDrivenPort<Message> notifierDrivenPort;
 
@@ -19,9 +19,9 @@ public class PingMessageHandler implements MessageHandler<PingMessage> {
     }
 
     @Override
-    public void handle(PingMessage pingMessage) {
-        Optional.of(pingMessage)
-                .map(pingMsg -> new PingResponse(
+    public void handle(PingMessageRequest pingMessageRequest) {
+        Optional.of(pingMessageRequest)
+                .map(pingMsg -> new PingMessageResponse(
                         pingMsg.getDestination(),
                         pingMsg.getSource(),
                         pingMsg.getNetworkId(),

@@ -7,10 +7,14 @@ import global.unet.domain.structures.NodeInfo;
 import java.io.Serializable;
 import java.util.UUID;
 
-public class PingMessage extends BaseMessage implements Serializable {
+public class PingMessageRequest extends BaseMessage implements Serializable {
 
-    public PingMessage(NodeInfo source, NodeInfo destination, UnionId networkId, UUID messageId, int hopes) {
+    public PingMessageRequest(NodeInfo source, NodeInfo destination, UnionId networkId, UUID messageId, int hopes) {
         super(source, destination, networkId, messageId, hopes);
+    }
+
+    public PingMessageRequest(NodeInfo source, NodeInfo destination, UnionId networkId, UUID messageId) {
+        super(source, destination, networkId, messageId);
     }
 
 
@@ -24,4 +28,6 @@ public class PingMessage extends BaseMessage implements Serializable {
                 ", hopes=" + hopes +
                 '}';
     }
+
+
 }

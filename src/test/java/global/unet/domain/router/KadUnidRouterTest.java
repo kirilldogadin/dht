@@ -3,13 +3,13 @@ package global.unet.domain.router;
 import global.unet.domain.id.UnionId;
 import global.unet.domain.structures.NodeInfo;
 import org.junit.Test;
-import util.TestUtil;
+import util.UnionGenerator;
 
 import java.util.Set;
 
 import static org.junit.Assert.assertTrue;
 
-public class KadUnidRouterTest extends TestUtil {
+public class KadUnidRouterTest extends UnionGenerator {
 
     @Test
     public void UnidRouterTest(){

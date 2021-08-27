@@ -9,9 +9,9 @@ import global.unet.domain.id.UnionId;
 import global.unet.domain.messages.*;
 import global.unet.application.server.*;
 import global.unet.domain.structures.NodeInfo;
-import global.unet.domain.protocol.ping.PingMessage;
+import global.unet.domain.protocol.ping.PingMessageRequest;
 import org.junit.Test;
-import util.TestUtil;
+import util.UnionGenerator;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -19,11 +19,12 @@ import java.util.*;
 
 import static java.lang.Thread.sleep;
 
-public class ServerPingMessageTest extends TestUtil
+public class ServerPingMessageRequestTest extends UnionGenerator
 {
 
     private final int SERVER_PORT = 4445;
 
+    //TODO Сначала тесты для всего ИЗ чего состоит этот код
     @Test
     public void test() throws URISyntaxException, InterruptedException
     {
@@ -54,7 +55,7 @@ public class ServerPingMessageTest extends TestUtil
 //        serverStarting.run();  vbgf
         Runnable sendingMessage = () -> {
             receiverNotifierDrivenPort.notify(
-                    new PingMessage(selfNodeInfo,
+                    new PingMessageRequest(selfNodeInfo,
                             selfNodeInfo,
                             networkId,
                             UUID.randomUUID(),
