@@ -19,9 +19,11 @@ import java.util.*;
 
 import static java.lang.Thread.sleep;
 
-public class ServerPingMessageRequestTest extends UnionGenerator
+@Deprecated
+public class ServerPingMessageRequestTest
 {
 
+    //TODO подбирать порты из доступных в init Методе
     private final int SERVER_PORT = 4445;
 
     //TODO Сначала тесты для всего ИЗ чего состоит этот код
@@ -30,8 +32,9 @@ public class ServerPingMessageRequestTest extends UnionGenerator
     {
 
         //nodeBaseInfo
-        UnionId nodeId = generateUnid();
-        UnionId networkId = generateUnid();
+        UnionGenerator unionGenerator = new UnionGenerator();
+        UnionId nodeId = unionGenerator.generateUnid();
+        UnionId networkId = unionGenerator.generateUnid();
         NodeInfo selfNodeInfo = new NodeInfo(new URI("localhost"), nodeId, SERVER_PORT);
         UnionInfo unionInfo = new UnionInfo(nodeId, networkId, selfNodeInfo);
 
@@ -58,8 +61,7 @@ public class ServerPingMessageRequestTest extends UnionGenerator
                     new PingMessageRequest(selfNodeInfo,
                             selfNodeInfo,
                             networkId,
-                            UUID.randomUUID(),
-                            BaseMessage.HOPES_DEFAULT)
+                            UUID.randomUUID())
             );
         };
         sendingMessage.run();

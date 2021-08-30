@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Just print message to Console
  */
-public class ListNotifierDrivenAdaptor<T extends Message> implements NotifierDrivenPort<T> {
+public class FakeNotifierDrivenAdaptor<T extends Message> implements NotifierDrivenPort<T> {
 
     List<T> messages = new ArrayList<>();
 

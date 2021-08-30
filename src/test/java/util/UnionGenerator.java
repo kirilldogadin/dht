@@ -10,10 +10,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 //todo из тестов в Ютилс основного пакета
-//TODO Я ЧЕ ОХУЕЛ В СТАТИЧНОМ КОНТЕКСТЕ ПИСАТЬ???? куколд епта
 public class UnionGenerator {
 
-    public static KademliaId generateUnid() {
+    public KademliaId generateUnid() {
         return generateUnid(KademliaId.BIT_COUNT);
     }
 
@@ -23,7 +22,7 @@ public class UnionGenerator {
      * @param bitsCount
      * @return
      */
-    public static byte[] unidAsByteArray(int bitsCount) {
+    public byte[] unidAsByteArray(int bitsCount) {
         byte[] id = new byte[bitsCount / Byte.SIZE];
         for (int i = 0; i < id.length; i++) {
             id[i] = (byte) ((int) (Math.random() * 256));
@@ -31,7 +30,7 @@ public class UnionGenerator {
         return id;
     }
 
-    public static KademliaId generateUnid(int bitsCount) {
+    public KademliaId generateUnid(int bitsCount) {
         return new KademliaId(unidAsByteArray(bitsCount));
     }
 
@@ -45,7 +44,7 @@ public class UnionGenerator {
      * @param defaultValue в какое из значений установить остальные биты 0/1
      * @return unionId
      */
-    public static KademliaId createKademliaIdByTemplate(int byteNumber, byte settableByte, byte defaultValue) {
+    public KademliaId createKademliaIdByTemplate(int byteNumber, byte settableByte, byte defaultValue) {
         int byteCount = KademliaId.BIT_COUNT / Byte.SIZE;
         byte[] bytes = new byte[byteCount];
 
@@ -62,7 +61,7 @@ public class UnionGenerator {
     /**
      * @return 0000 0000 0111 1111
      */
-    public static UnionId constantId() {
+    public UnionId constantId() {
         KademliaId selfId = createKademliaIdByTemplate(1, (byte) 127, (byte) 0);
         return selfId;
     }
@@ -70,23 +69,23 @@ public class UnionGenerator {
     /**
      * @return 0000 0000 0010 0000
      */
-    public static UnionId constantId2() {
+    public UnionId constantId2() {
         return createKademliaIdByTemplate(1, (byte) 32, (byte) 0);
     }
     /**
      * @return 0000 0000 0010 0000
      */
-    public static UnionId constantNetworkId() {
+    public UnionId constantNetworkId() {
         return createKademliaIdByTemplate(1, (byte) 32, (byte) 0);
     }
 
-    public static XorTreeRoutingTable createRoutingTable() {
+    public XorTreeRoutingTable createRoutingTable() {
         UnionId kademliaFixedId = constantId();
         XorTreeRoutingTable routingTable = new XorTreeRoutingTable(kademliaFixedId);
         return routingTable;
     }
 
-    public static NodeInfo nodeInfo1() {
+    public NodeInfo nodeInfo1() {
         try {
             return new NodeInfo(new URI("0.0.0.0"), constantId2(), 228);
         } catch (URISyntaxException e) {
@@ -95,15 +94,4 @@ public class UnionGenerator {
 
     }
 
-    public static UnionInfo nodeInfoHolder(){
-        UnionId nodeId = generateUnid();
-        UnionId networkId = generateUnid();
-        NodeInfo selfNodeInfo = null;
-        try {
-            selfNodeInfo = new NodeInfo(new URI("localhost"), nodeId, 4445);
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-        return new UnionInfo(nodeId, networkId, selfNodeInfo);
-    }
 }

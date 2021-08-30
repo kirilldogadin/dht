@@ -1,35 +1,29 @@
 package global.unet.domain.protocol.ping;
 
+import cases.Ping2NodesContext;
 import global.unet.domain.messages.Message;
+import org.junit.BeforeClass;
 import org.junit.Test;
-import util.fake.messages.PairMessageGenerator;
-import util.fake.node.NodeInfoPairGenerator;
-import util.fake.notifier.ListNotifierDrivenAdaptor;
-
-import java.util.UUID;
 
 import static org.junit.Assert.assertTrue;
-import static util.UnionGenerator.*;
 
-public class PingMessageRequestHandlerTest {
+public class PingMessageRequestHandlerTest  {
 
-    private final ListNotifierDrivenAdaptor<Message> listNotifier = new ListNotifierDrivenAdaptor<>();
-    private final PingMessageHandler pingMessageHandler = new PingMessageHandler(listNotifier);
-    private final NodeInfoPairGenerator nodeInfoPairGenerator = new NodeInfoPairGenerator(constantId(), constantId2());
-    private final PairMessageGenerator pairMessageGenerator = new PairMessageGenerator(
-            nodeInfoPairGenerator.nodeInfo1(),
-            nodeInfoPairGenerator.nodeInfo2()
-    );
+    private Ping2NodesContext ping2NodesContext = new Ping2NodesContext();
 
+    void initBefore (){
+        ping2NodesContext.init();
+    }
     @Test
     public void testHandle() {
-        PairMessageGenerator.PairMessageContext pairMessageContext = pairMessageGenerator.generatePairMessageContext(UUID.randomUUID(),constantNetworkId());
-        PingMessageRequest pingMessageRequest = pairMessageContext.pingMessageRequest();
-        PingMessageResponse expectedPingMessageResponse = pairMessageContext.pingMessageResponse();
+        initBefore();
 
-        pingMessageHandler.handle(pingMessageRequest);
+        PingMessageRequest pingMessageRequest = ping2NodesContext.getSourceNodePingMessageRequest();
+        PingMessageResponse expectedPingMessageResponse = ping2NodesContext.getDestinationNodePingMessageResponse();
 
-        Message responseMessage = listNotifier.getMessages().get(0);
+        ping2NodesContext.getPingMessageHandler().handle(pingMessageRequest);
+
+        Message responseMessage = ping2NodesContext.getListNotifier().getMessages().get(0);
         assertTrue(responseMessage.equals(expectedPingMessageResponse));
     }
 }

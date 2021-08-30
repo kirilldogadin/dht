@@ -58,8 +58,7 @@ public class MessageReceiverTest extends UnionGenerator
                     new PingMessageRequest(selfNodeInfo,
                             selfNodeInfo,
                             networkId,
-                            UUID.randomUUID(),
-                            BaseMessage.HOPES_DEFAULT)
+                            UUID.randomUUID()                            )
             );
         };
         sendingMessage.run();

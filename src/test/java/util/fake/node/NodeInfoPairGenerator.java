@@ -11,11 +11,11 @@ import java.net.URISyntaxException;
  */
 public class NodeInfoPairGenerator {
 
-    private final UnionId unionId1;
-    private final UnionId unionId2;
+    private final UnionId unionIdOfSourceNode;
+    private final UnionId unionIdOfDestinationNode;
     private final URI LOCALHOST;
-    private final int portOfNode1 = 228;
-    private final int portOfNode2 = 229;
+    private final int portOfSourceNode = 228;
+    private final int portOfDestinationNode = 229;
 
     {
         try {
@@ -25,22 +25,22 @@ public class NodeInfoPairGenerator {
         }
     }
 
-    public NodeInfoPairGenerator(UnionId unionId1, UnionId unionId2) {
+    public NodeInfoPairGenerator(UnionId unionIdOfSourceNode, UnionId unionIdOfDestinationNode) {
        //TODO check 1 - разные объекты, различные UUID, общий NetworkId
-        this.unionId1 = unionId1;
-        this.unionId2 = unionId2;
+        this.unionIdOfSourceNode = unionIdOfSourceNode;
+        this.unionIdOfDestinationNode = unionIdOfDestinationNode;
     }
 
     /**
      * @return localhost unionId1 port1
      */
-    public NodeInfo nodeInfo1(){
-        return new NodeInfo(LOCALHOST, unionId1, portOfNode1);
+    public NodeInfo sourceNodeInfo(){
+        return new NodeInfo(LOCALHOST, unionIdOfSourceNode, portOfSourceNode);
     }
     /**
      * @return localhost unionId1 port2
      */
-    public NodeInfo nodeInfo2(){
-        return new NodeInfo(LOCALHOST, unionId2, portOfNode2);
+    public NodeInfo destinationNodeInfo(){
+        return new NodeInfo(LOCALHOST, unionIdOfDestinationNode, portOfDestinationNode);
     }
 }

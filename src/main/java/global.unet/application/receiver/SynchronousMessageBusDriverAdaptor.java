@@ -1,4 +1,4 @@
-package global.unet.application.command;
+package global.unet.application.receiver;
 
 import global.unet.domain.messages.Message;
 import global.unet.domain.protocol.MessageHandler;
@@ -6,13 +6,19 @@ import global.unet.domain.receiver.MessageBusDriver;
 
 import java.util.HashMap;
 
-//TODO хреново, что требуются дженерики наружу
 public class SynchronousMessageBusDriverAdaptor implements MessageBusDriver {
 
-     private final HashMap handlerByMessage;
+    private final HashMap<Class<? extends Message>, MessageHandler<? extends Message>> handlerByMessage;
 
-    public SynchronousMessageBusDriverAdaptor(HashMap<Class<? extends Message>, MessageHandler<? extends Message>> message2MessageHandler) {
+     public SynchronousMessageBusDriverAdaptor(HashMap<Class<? extends Message>, MessageHandler<? extends Message>> message2MessageHandler) {
         handlerByMessage = message2MessageHandler;
+    }
+    public SynchronousMessageBusDriverAdaptor() {
+        this.handlerByMessage = new HashMap<>();
+    }
+
+    public <T extends Message> void addHandlerMapping(Class<T> messageClass, MessageHandler<T> messageHandler){
+        handlerByMessage.put(messageClass,messageHandler);
     }
 
     private <T extends Message> MessageHandler<T> resolveMessageHandler(Class<? extends Message> message) {
@@ -22,6 +28,5 @@ public class SynchronousMessageBusDriverAdaptor implements MessageBusDriver {
     @Override
     public <T extends Message> void handle(T message) {
         resolveMessageHandler(message.getClass()).handle(message);
-
     }
 }
