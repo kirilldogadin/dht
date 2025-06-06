@@ -1,0 +1,101 @@
+=== DHT Quality Assurance Report ===
+Время запуска: 2025-06-06T07:42:29.863432
+
+1. ТЕСТИРОВАНИЕ БАЗОВЫХ КОМПОНЕНТОВ
+=====================================
+Выполняется: KademliaId Basic Operations...
+  ✅ ПРОЙДЕН (0ms): Базовые операции работают корректно
+Выполняется: KademliaId XOR Distance...
+  ✅ ПРОЙДЕН (0ms): XOR расстояние вычисляется корректно
+Выполняется: KademliaId Comparison...
+  ✅ ПРОЙДЕН (0ms): Сравнение работает корректно
+Выполняется: KademliaId Common Prefix...
+  ✅ ПРОЙДЕН (4ms): Общий префикс: 15 бит
+Выполняется: Bucket LRU Logic...
+  ✅ ПРОЙДЕН (5ms): LRU логика работает корректно
+Выполняется: Bucket Capacity Management...
+  ✅ ПРОЙДЕН (1ms): Управление емкостью работает
+Выполняется: Bucket Node Updates...
+  ✅ ПРОЙДЕН (0ms): Обновление узлов работает
+
+2. ФУНКЦИОНАЛЬНОЕ ТЕСТИРОВАНИЕ
+==============================
+Выполняется: Routing Table Node Management...
+  ✅ ПРОЙДЕН (7ms): Управление узлами работает
+  Метрики: {actual_count=20, nodes_added=20}
+Выполняется: Routing Table Closest Nodes Search...
+  ✅ ПРОЙДЕН (9ms): Поиск ближайших узлов работает
+  Метрики: {found_nodes=10, total_nodes=30}
+Выполняется: Routing Table Bucket Distribution...
+  ✅ ПРОЙДЕН (5ms): Распределение по bucket'ам работает
+  Метрики: {bucket_sizes={0=0, 154=4, 155=2, 156=5, 157=12, 158=16, 159=20}, total_nodes=59, bucket_count=7}
+Выполняется: Iterative Lookup Basic Search...
+  ❌ ПРОВАЛЕН (2281ms): Исключение: java.lang.StackOverflowError
+Выполняется: Iterative Lookup Parallel Queries...
+  ❌ ПРОВАЛЕН (984ms): Исключение: java.lang.StackOverflowError
+Выполняется: Iterative Lookup Error Handling...
+  ✅ ПРОЙДЕН (4ms): Обработка ошибок работает
+
+3. ТЕСТИРОВАНИЕ ПРОИЗВОДИТЕЛЬНОСТИ
+==================================
+Выполняется: Performance: Large Routing Table...
+  ✅ ПРОЙДЕН (27ms): Производительность приемлемая
+  Метрики: {found_nodes=20, add_time_ms=26, search_time_ms=1, nodes_added=111}
+Выполняется: Performance: Bulk Node Operations...
+  ✅ ПРОЙДЕН (9ms): Массовые операции эффективны
+  Метрики: {final_node_count=99, bulk_remove_time_ms=0, bulk_add_time_ms=9}
+Выполняется: Performance: Search Efficiency...
+  ✅ ПРОЙДЕН (7ms): Поиск эффективен
+  Метрики: {avg_search_time_ms=0.06, total_search_time_ms=3, search_count=50}
+
+4. СТРЕСС-ТЕСТИРОВАНИЕ
+======================
+Выполняется: Stress: High Node Count...
+  ✅ ПРОЙДЕН (45ms): Стресс-тест пройден
+  Метрики: {actual_nodes=118, target_nodes=1000, total_time_ms=45, bucket_count=11}
+Выполняется: Stress: Rapid Operations...
+  ✅ ПРОЙДЕН (5ms): Быстрые операции работают
+  Метрики: {ops_per_second=310000.0, total_time_ms=5, total_operations=1550}
+Выполняется: Stress: Memory Usage...
+  ✅ ПРОЙДЕН (163ms): Использование памяти приемлемое
+  Метрики: {final_memory_bytes=5205832, memory_used_bytes=-96669384, initial_memory_bytes=101875216, nodes_count=113, memory_used_mb=-92}
+
+5. ТЕСТИРОВАНИЕ МНОГОПОТОЧНОСТИ
+===============================
+Выполняется: Concurrency: Routing Table...
+  ✅ ПРОЙДЕН (6ms): Многопоточность работает
+  Метрики: {operations_per_thread=20, thread_count=5, final_node_count=44}
+Выполняется: Concurrency: Bucket Operations...
+  ✅ ПРОЙДЕН (3ms): Многопоточность bucket работает
+  Метрики: {operations_per_thread=10, thread_count=3, final_bucket_size=20}
+Выполняется: Concurrency: Lookup Operations...
+  ❌ ПРОВАЛЕН (42041ms): Исключение: java.lang.StackOverflowError
+
+6. ИНТЕГРАЦИОННОЕ ТЕСТИРОВАНИЕ
+==============================
+Выполняется: Integration: Full DHT Workflow...
+  ✅ ПРОЙДЕН (4ms): Полный DHT workflow работает
+  Метрики: {found_nodes=10, lookup_successful=true, routing_table_nodes=30}
+Выполняется: Integration: Network Simulation...
+  ✅ ПРОЙДЕН (3ms): Симуляция сети работает
+  Метрики: {network_nodes=5, total_found_nodes=25, avg_found_per_node=5.0}
+Выполняется: Integration: Data Consistency...
+  ✅ ПРОЙДЕН (2ms): Консистентность данных поддерживается
+  Метрики: {all_present_before_removal=true, consistent_after_removal=true, removed_nodes=10, added_nodes=20, initial_nodes=30, final_nodes=20}
+
+=== ИТОГОВЫЙ ОТЧЕТ ===
+Всего тестов: 25
+Пройдено: 22
+Провалено: 3
+Процент успеха: 88.0%
+Среднее время выполнения теста: 1824.6 ms
+
+=== РЕКОМЕНДАЦИИ ===
+⚠️ Хорошее качество, но есть проблемы для исправления.
+
+Проваленные тесты:
+- Iterative Lookup Basic Search: Исключение: java.lang.StackOverflowError
+- Iterative Lookup Parallel Queries: Исключение: java.lang.StackOverflowError
+- Concurrency: Lookup Operations: Исключение: java.lang.StackOverflowError
+
+Отчет завершен: 2025-06-06T07:43:15.581451

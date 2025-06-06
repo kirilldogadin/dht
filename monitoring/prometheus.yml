@@ -1,0 +1,35 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+scrape_configs:
+  # DHT узлы
+  - job_name: 'dht-nodes'
+    static_configs:
+      - targets: 
+          - 'dht-bootstrap:8080'
+          - 'dht-node-2:8080'
+          - 'dht-node-3:8080'
+          - 'dht-node-4:8080'
+          - 'dht-node-5:8080'
+          - 'dht-node-6:8080'
+    metrics_path: '/api/metrics'
+    scrape_interval: 10s
+    scrape_timeout: 5s
+
+  # Prometheus самомониторинг
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Мониторинг веб-дашборда
+  - job_name: 'dht-monitor'
+    static_configs:
+      - targets: ['dht-monitor:80']
+    metrics_path: '/nginx_status'
+    scrape_interval: 30s
+

@@ -1,0 +1,226 @@
+version: '3.8'
+
+services:
+  # Bootstrap узел DHT
+  dht-bootstrap:
+    build: .
+    container_name: dht-bootstrap
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ID=bootstrap
+      - NODE_PORT=8080
+      - BOOTSTRAP_MODE=true
+      - JVM_OPTS=-Xmx512m
+    volumes:
+      - dht_bootstrap_data:/app/data
+    networks:
+      - dht-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # DHT узел 2
+  dht-node-2:
+    build: .
+    container_name: dht-node-2
+    ports:
+      - "8081:8080"
+    environment:
+      - NODE_ID=node-2
+      - NODE_PORT=8080
+      - BOOTSTRAP_HOST=dht-bootstrap
+      - BOOTSTRAP_PORT=8080
+      - JVM_OPTS=-Xmx512m
+    volumes:
+      - dht_node2_data:/app/data
+    networks:
+      - dht-network
+    depends_on:
+      - dht-bootstrap
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # DHT узел 3
+  dht-node-3:
+    build: .
+    container_name: dht-node-3
+    ports:
+      - "8082:8080"
+    environment:
+      - NODE_ID=node-3
+      - NODE_PORT=8080
+      - BOOTSTRAP_HOST=dht-bootstrap
+      - BOOTSTRAP_PORT=8080
+      - JVM_OPTS=-Xmx512m
+    volumes:
+      - dht_node3_data:/app/data
+    networks:
+      - dht-network
+    depends_on:
+      - dht-bootstrap
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # DHT узел 4
+  dht-node-4:
+    build: .
+    container_name: dht-node-4
+    ports:
+      - "8083:8080"
+    environment:
+      - NODE_ID=node-4
+      - NODE_PORT=8080
+      - BOOTSTRAP_HOST=dht-bootstrap
+      - BOOTSTRAP_PORT=8080
+      - JVM_OPTS=-Xmx512m
+    volumes:
+      - dht_node4_data:/app/data
+    networks:
+      - dht-network
+    depends_on:
+      - dht-bootstrap
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # DHT узел 5
+  dht-node-5:
+    build: .
+    container_name: dht-node-5
+    ports:
+      - "8084:8080"
+    environment:
+      - NODE_ID=node-5
+      - NODE_PORT=8080
+      - BOOTSTRAP_HOST=dht-bootstrap
+      - BOOTSTRAP_PORT=8080
+      - JVM_OPTS=-Xmx512m
+    volumes:
+      - dht_node5_data:/app/data
+    networks:
+      - dht-network
+    depends_on:
+      - dht-bootstrap
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # DHT узел 6
+  dht-node-6:
+    build: .
+    container_name: dht-node-6
+    ports:
+      - "8085:8080"
+    environment:
+      - NODE_ID=node-6
+      - NODE_PORT=8080
+      - BOOTSTRAP_HOST=dht-bootstrap
+      - BOOTSTRAP_PORT=8080
+      - JVM_OPTS=-Xmx512m
+    volumes:
+      - dht_node6_data:/app/data
+    networks:
+      - dht-network
+    depends_on:
+      - dht-bootstrap
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Веб-дашборд для мониторинга
+  dht-monitor:
+    image: nginx:alpine
+    container_name: dht-monitor
+    ports:
+      - "3000:80"
+    volumes:
+      - ./monitoring/dashboard:/usr/share/nginx/html:ro
+      - ./monitoring/nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - dht-network
+    depends_on:
+      - dht-bootstrap
+    restart: unless-stopped
+
+  # Prometheus для сбора метрик
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: dht-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    networks:
+      - dht-network
+    restart: unless-stopped
+    profiles:
+      - monitoring
+
+  # Grafana для визуализации
+  grafana:
+    image: grafana/grafana:latest
+    container_name: dht-grafana
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    networks:
+      - dht-network
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+    profiles:
+      - monitoring
+
+# Сети
+networks:
+  dht-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+# Volumes для постоянного хранения данных
+volumes:
+  dht_bootstrap_data:
+  dht_node2_data:
+  dht_node3_data:
+  dht_node4_data:
+  dht_node5_data:
+  dht_node6_data:
+  prometheus_data:
+  grafana_data:
+

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="global.unet.domain.id.KademliaIdTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2025-06-06T09:47:21" hostname="f07a69b5620a" time="0.044">
+  <properties/>
+  <testcase name="testCreateKademliaId()" classname="global.unet.domain.id.KademliaIdTest" time="0.028"/>
+  <testcase name="testCompareTo()" classname="global.unet.domain.id.KademliaIdTest" time="0.002"/>
+  <testcase name="testComputeDistance()" classname="global.unet.domain.id.KademliaIdTest" time="0.001"/>
+  <testcase name="testComputeDistanceAsUnionId()" classname="global.unet.domain.id.KademliaIdTest" time="0.0"/>
+  <testcase name="testGetCommonPrefixLength()" classname="global.unet.domain.id.KademliaIdTest" time="0.0"/>
+  <testcase name="testCreateKademliaIdWithInvalidLength()" classname="global.unet.domain.id.KademliaIdTest" time="0.003"/>
+  <testcase name="testCreateKademliaIdFromString()" classname="global.unet.domain.id.KademliaIdTest" time="0.001"/>
+  <testcase name="testEquals()" classname="global.unet.domain.id.KademliaIdTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
